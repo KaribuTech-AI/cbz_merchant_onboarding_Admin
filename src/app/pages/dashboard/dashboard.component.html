@@ -1,0 +1,195 @@
+<div class="dashboard-container">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <div class="stat-header">
+        <span class="stat-title">{{ stat.title }}</span>
+        <div class="stat-icon" [ngClass]="stat.iconType + '-icon'">
+          <!-- Merchant Icon -->
+          <svg *ngIf="stat.iconType === 'merchant'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+          
+          <!-- Transaction Icon -->
+          <svg *ngIf="stat.iconType === 'transaction'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          
+          <!-- Volume Icon -->
+          <svg *ngIf="stat.iconType === 'volume'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          
+          <!-- Dispute Icon -->
+          <svg *ngIf="stat.iconType === 'dispute'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ stat.value }}</div>
+      <div class="stat-change" [ngClass]="stat.positive ? 'positive' : 'negative'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline *ngIf="stat.positive" points="18 15 12 9 6 15"></polyline>
+          <polyline *ngIf="!stat.positive" points="6 9 12 15 18 9"></polyline>
+        </svg>
+        {{ stat.change }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Transaction Volume Chart -->
+    <div class="chart-card large">
+      <div class="chart-header">
+        <div>
+          <h3>Transaction Volume</h3>
+          <p class="chart-subtitle">Monthly transaction trends</p>
+        </div>
+      </div>
+      <div class="chart-container" #chartContainer>
+        <svg class="line-chart" [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight">
+          <!-- Grid lines -->
+          <g class="grid-lines">
+            <line *ngFor="let y of gridLinesY" 
+                  [attr.x1]="chartPadding" 
+                  [attr.y1]="y" 
+                  [attr.x2]="chartWidth - chartPadding" 
+                  [attr.y2]="y" 
+                  stroke="#e2e8f0" 
+                  stroke-dasharray="4,4"/>
+            <line *ngFor="let x of gridLinesX" 
+                  [attr.x1]="x" 
+                  [attr.y1]="chartPadding" 
+                  [attr.x2]="x" 
+                  [attr.y2]="chartHeight - chartPadding" 
+                  stroke="#e2e8f0" 
+                  stroke-dasharray="4,4"/>
+          </g>
+          
+          <!-- Line path -->
+          <path [attr.d]="linePath" 
+                fill="none" 
+                stroke="#c53030" 
+                stroke-width="2"/>
+          
+          <!-- Data points -->
+          <circle *ngFor="let point of chartData; let i = index" 
+                  [attr.cx]="getX(i)" 
+                  [attr.cy]="getY(point.value)" 
+                  r="4" 
+                  fill="#c53030"
+                  class="data-point"
+                  (mouseenter)="showTooltip($event, point, i)"
+                  (mouseleave)="hideTooltip()"/>
+          
+          <!-- X-axis labels -->
+          <text *ngFor="let point of chartData; let i = index"
+                [attr.x]="getX(i)"
+                [attr.y]="chartHeight - 10"
+                text-anchor="middle"
+                fill="#718096"
+                font-size="11">
+            {{ point.month }}
+          </text>
+          
+          <!-- Y-axis labels -->
+          <text *ngFor="let label of yAxisLabels; let i = index"
+                [attr.x]="10"
+                [attr.y]="chartPadding + (i * (chartHeight - 2 * chartPadding) / (yAxisLabels.length - 1))"
+                text-anchor="start"
+                fill="#718096"
+                font-size="11">
+            {{ label }}
+          </text>
+        </svg>
+        
+        <!-- Tooltip -->
+        <div class="chart-tooltip" *ngIf="tooltipVisible" [style.left.px]="tooltipX" [style.top.px]="tooltipY">
+          <div class="tooltip-month">{{ tooltipData?.month }}</div>
+          <div class="tooltip-value">Value: {{ tooltipData?.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Channel Distribution Chart -->
+    <div class="chart-card small">
+      <div class="chart-header">
+        <div>
+          <h3>Channel Distribution</h3>
+          <p class="chart-subtitle">Transactions by payment channel</p>
+        </div>
+      </div>
+      <div class="bar-chart-container">
+        <div class="bar-chart">
+          <div *ngFor="let channel of channelData" class="bar-item">
+            <div class="bar-label">{{ channel.name }}</div>
+            <div class="bar-wrapper">
+              <div class="bar-fill" [style.width.%]="(channel.value / maxChannelValue) * 100"></div>
+            </div>
+            <div class="bar-value">{{ channel.value }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Row -->
+  <div class="bottom-row">
+    <!-- Recent Transactions -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <h3>Recent Transactions</h3>
+          <p class="table-subtitle">Latest merchant transactions</p>
+        </div>
+      </div>
+      <div class="table-content">
+        <div class="transaction-item" *ngFor="let transaction of recentTransactions">
+          <div class="transaction-icon" [ngClass]="transaction.type">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-name">{{ transaction.name }}</div>
+            <div class="transaction-id">{{ transaction.id }}</div>
+          </div>
+          <div class="transaction-amount">{{ transaction.amount }}</div>
+          <span class="status-badge" [ngClass]="transaction.status">{{ transaction.status }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts & Notifications -->
+    <div class="alerts-card">
+      <div class="alerts-header">
+        <div>
+          <h3>Alerts & Notifications</h3>
+          <p class="alerts-subtitle">Recent system alerts</p>
+        </div>
+      </div>
+      <div class="alerts-content">
+        <div class="alert-item" [ngClass]="alert.type" *ngFor="let alert of alerts">
+          <div class="alert-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="alert-info">
+            <div class="alert-title">{{ alert.title }}</div>
+            <div class="alert-desc">{{ alert.description }}</div>
+          </div>
+          <div class="alert-time">{{ alert.time }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+  background: #f7fafc;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px;
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: 16px;
+  }
+}

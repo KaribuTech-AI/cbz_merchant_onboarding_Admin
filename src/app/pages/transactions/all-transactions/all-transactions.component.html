@@ -1,0 +1,187 @@
+<div class="dashboard">
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Today's Transactions</span>
+        <span class="card-icon">📊</span>
+      </div>
+      <div class="card-value">{{ todayTransactions.toLocaleString() }}</div>
+      <div class="card-change positive">{{ transactionChange }} from yesterday</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Total Volume</span>
+      </div>
+      <div class="card-value">${{ totalVolume.toLocaleString('en-US', {minimumFractionDigits: 2}) }}</div>
+      <div class="card-change positive">
+        <span class="arrow">▲</span> {{ volumeChange }}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Fee Revenue</span>
+      </div>
+      <div class="card-value">${{ feeRevenue.toFixed(2) }}</div>
+      <div class="card-change positive">
+        <span class="arrow">▲</span> {{ revenueChange }}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">Success Rate</span>
+      </div>
+      <div class="card-value">{{ successRate }}%</div>
+      <div class="card-change negative">
+        <span class="arrow">▼</span> {{ successChange }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-section">
+    <div class="chart-header">
+      <div>
+        <h3>Transaction Volume</h3>
+        <p class="chart-subtitle">Hourly transaction volume for today</p>
+      </div>
+      <button class="today-btn">📅 Today</button>
+    </div>
+
+    <div class="chart-container">
+      <svg class="chart" viewBox="0 0 1000 250">
+        <!-- Grid lines -->
+        <line *ngFor="let i of [0,1,2,3,4,5]" 
+              [attr.x1]="0" 
+              [attr.y1]="50 * i" 
+              [attr.x2]="1000" 
+              [attr.y2]="50 * i" 
+              class="grid-line" />
+
+        <!-- Y-axis labels -->
+        <text *ngFor="let val of [60000, 45000, 30000, 15000, 0]; let i = index" 
+              [attr.x]="10" 
+              [attr.y]="50 * i + 15" 
+              class="axis-label">{{ val.toLocaleString() }}</text>
+
+        <!-- X-axis labels -->
+        <text *ngFor="let point of chartData; let i = index" 
+              [attr.x]="(i * 90) + 40" 
+              [attr.y]="235" 
+              class="axis-label">{{ point.time }}</text>
+
+        <!-- Line chart -->
+        <polyline 
+          [attr.points]="getChartPoints(true)"
+          class="chart-line chart-line-red" />
+        
+        <polyline 
+          [attr.points]="getChartPoints(false)"
+          class="chart-line chart-line-gray" />
+
+        <!-- Data points -->
+        <g *ngFor="let point of chartData; let i = index">
+          <circle 
+            [attr.cx]="getPointX(i)" 
+            [attr.cy]="getPointY(point.value)" 
+            r="4" 
+            class="data-point"
+            (mouseenter)="onChartHover(point)"
+            (mouseleave)="clearHover()" />
+        </g>
+      </svg>
+
+      <!-- Tooltip -->
+      <div class="chart-tooltip" *ngIf="hoveredPoint">
+        <div class="tooltip-time">{{ hoveredPoint.time }}</div>
+        <div class="tooltip-value">Value: {{ hoveredPoint.value.toLocaleString() }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="transactions-section">
+    <h3>Recent Transactions</h3>
+
+    <div class="filters">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Search by transaction ID or merchant..." 
+          [(ngModel)]="searchTerm" />
+      </div>
+
+      <select [(ngModel)]="statusFilter" class="filter-select">
+        <option>All Status</option>
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>Failed</option>
+      </select>
+
+      <select [(ngModel)]="channelFilter" class="filter-select">
+        <option>All Channels</option>
+        <option>POS</option>
+        <option>E-Commerce</option>
+        <option>QR</option>
+        <option>Mobile</option>
+      </select>
+
+      <button class="icon-btn">⚙️</button>
+      <button class="icon-btn">⬇️</button>
+    </div>
+
+    <div class="table-container">
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Merchant</th>
+            <th>Type</th>
+            <th>Channel</th>
+            <th>Card Type</th>
+            <th>Amount</th>
+            <th>Fee</th>
+            <th>Status</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let txn of transactions">
+            <td class="txn-id">{{ txn.id }}</td>
+            <td>
+              <div class="merchant-cell">
+                <div class="merchant-name">{{ txn.merchant }}</div>
+                <div class="merchant-code">{{ txn.merchantCode }}</div>
+              </div>
+            </td>
+            <td><span class="badge">{{ txn.type }}</span></td>
+            <td>{{ txn.channel }}</td>
+            <td>{{ txn.cardType }}</td>
+            <td class="amount" [class.negative]="txn.amount < 0">
+              {{ txn.amount < 0 ? '-' : '' }}${{ Math.abs(txn.amount).toFixed(2) }}
+            </td>
+            <td class="fee">${{ txn.fee.toFixed(2) }}</td>
+            <td>
+              <span [class]="'status ' + getStatusClass(txn.status)">
+                {{ txn.status }}
+              </span>
+            </td>
+            <td class="timestamp">{{ txn.timestamp }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <span class="showing-text">Showing 8 of 8 transactions</span>
+      <div class="pagination">
+        <button class="page-btn" disabled>Previous</button>
+        <button class="page-btn">Next</button>
+      </div>
+    </div>
+  </div>
+</div>

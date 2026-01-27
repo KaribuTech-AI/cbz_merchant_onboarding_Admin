@@ -1,0 +1,22 @@
+<div class="transactions-wrapper">
+  <!-- Tab Navigation -->
+  <div class="tabs-container">
+    <nav class="tabs-nav">
+      <a 
+        routerLink="/transactions/all" 
+        routerLinkActive="active"
+        class="tab-link">
+        All Transactions
+      </a>
+      <a 
+        routerLink="/transactions/settlement" 
+        routerLinkActive="active"
+        class="tab-link">
+        Settlement
+      </a>
+    </nav>
+  </div>
+
+  <!-- Child Routes Display Here -->
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,165 @@
+<div class="settlement-container">
+  <!-- Summary Cards Row 1 -->
+  <div class="summary-cards-top">
+    <div class="summary-card">
+      <div class="card-content">
+        <div class="card-label">Total Gross</div>
+        <div class="card-value">${{ totalGross.toLocaleString() }}</div>
+      </div>
+      <div class="card-icon red">💵</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-content">
+        <div class="card-label">Total Fees</div>
+        <div class="card-value blue">${{ totalFees.toLocaleString('en-US', {minimumFractionDigits: 1}) }}</div>
+      </div>
+      <div class="card-icon blue">📊</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-content">
+        <div class="card-label">Net Payable</div>
+        <div class="card-value green">${{ netPayable.toLocaleString('en-US', {minimumFractionDigits: 1}) }}</div>
+      </div>
+      <div class="card-icon green">💰</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-content">
+        <div class="card-label">Pending</div>
+        <div class="card-value yellow">{{ pendingCount }}</div>
+      </div>
+      <div class="card-icon yellow">⏱️</div>
+    </div>
+  </div>
+
+  <!-- Settlement Type Cards -->
+  <div class="settlement-type-cards">
+    <div class="type-card">
+      <div class="type-badge green">T+0</div>
+      <div class="type-info">
+        <div class="type-label">Same Day Settlement</div>
+        <div class="type-value">${{ sameDayAmount.toLocaleString() }}</div>
+        <div class="type-meta">{{ sameDayMerchants }} merchants</div>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-badge blue">T+1</div>
+      <div class="type-info">
+        <div class="type-label">Next Day Settlement</div>
+        <div class="type-value">${{ nextDayAmount.toLocaleString() }}</div>
+        <div class="type-meta">{{ nextDayMerchants }} merchants</div>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-badge orange">T+2+</div>
+      <div class="type-info">
+        <div class="type-label">Deferred Settlement</div>
+        <div class="type-value">${{ deferredAmount.toLocaleString() }}</div>
+        <div class="type-meta">{{ deferredMerchants }} merchants</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settlement Batches Section -->
+  <div class="batches-section">
+    <div class="section-header">
+      <div>
+        <h3>Settlement Batches</h3>
+        <p class="section-subtitle">Manage merchant settlement processing</p>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn" (click)="refreshData()">
+          🔄 Refresh
+        </button>
+        <button class="action-btn" (click)="exportData()">
+          ⬇️ Export
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button 
+        class="tab" 
+        [class.active]="activeFilter === 'All'"
+        (click)="setFilter('All')">
+        All
+      </button>
+      <button 
+        class="tab" 
+        [class.active]="activeFilter === 'Pending'"
+        (click)="setFilter('Pending')">
+        Pending
+      </button>
+      <button 
+        class="tab" 
+        [class.active]="activeFilter === 'Processing'"
+        (click)="setFilter('Processing')">
+        Processing
+      </button>
+      <button 
+        class="tab" 
+        [class.active]="activeFilter === 'Completed'"
+        (click)="setFilter('Completed')">
+        Completed
+      </button>
+      <button 
+        class="tab" 
+        [class.active]="activeFilter === 'Failed'"
+        (click)="setFilter('Failed')">
+        Failed
+      </button>
+    </div>
+
+    <!-- Settlement Table -->
+    <div class="table-container">
+      <table class="settlement-table">
+        <thead>
+          <tr>
+            <th>Settlement ID</th>
+            <th>Merchant</th>
+            <th>Model</th>
+            <th>Transactions</th>
+            <th>Gross Amount</th>
+            <th>Fees</th>
+            <th>Net Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let settlement of filteredSettlements">
+            <td class="settlement-id">{{ settlement.id }}</td>
+            <td>
+              <div class="merchant-cell">
+                <div class="merchant-name">{{ settlement.merchant }}</div>
+                <div class="merchant-code">{{ settlement.merchantCode }}</div>
+              </div>
+            </td>
+            <td>
+              <span class="model-badge">{{ settlement.model }}</span>
+            </td>
+            <td>{{ settlement.transactions }}</td>
+            <td class="amount">${{ settlement.grossAmount.toLocaleString() }}</td>
+            <td class="fees">-${{ settlement.fees.toLocaleString('en-US', {minimumFractionDigits: 2}) }}</td>
+            <td class="net-amount">${{ settlement.netAmount.toLocaleString('en-US', {minimumFractionDigits: 1}) }}</td>
+            <td>
+              <span [class]="'status ' + getStatusClass(settlement.status)">
+                {{ settlement.status }}
+              </span>
+            </td>
+            <td class="date">{{ settlement.date }}</td>
+            <td class="actions">
+              <button class="menu-btn">⋯</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

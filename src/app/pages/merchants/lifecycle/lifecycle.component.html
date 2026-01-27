@@ -1,0 +1,361 @@
+<div class="lifecycle-container">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">New</div>
+          <div class="stat-value">{{ stats.new }}</div>
+          <div class="stat-subtitle">1% of total</div>
+        </div>
+        <div class="stat-indicator blue"></div>
+      </div>
+    </div>
+
+    <div class="stat-card active-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">Active</div>
+          <div class="stat-value">{{ stats.active }}</div>
+          <div class="stat-subtitle">66% of total</div>
+        </div>
+        <div class="stat-indicator green"></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">Growth</div>
+          <div class="stat-value">{{ stats.growth }}</div>
+          <div class="stat-subtitle">11% of total</div>
+        </div>
+        <div class="stat-indicator red"></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">At Risk</div>
+          <div class="stat-value">{{ stats.atRisk }}</div>
+          <div class="stat-subtitle">5% of total</div>
+        </div>
+        <div class="stat-indicator yellow"></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">Dormant</div>
+          <div class="stat-value">{{ stats.dormant }}</div>
+          <div class="stat-subtitle">3% of total</div>
+        </div>
+        <div class="stat-indicator gray"></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-label">Churned</div>
+          <div class="stat-value">{{ stats.churned }}</div>
+          <div class="stat-subtitle">1% of total</div>
+        </div>
+        <div class="stat-indicator dark-red"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Activity Trend Chart -->
+    <div class="chart-card large">
+      <div class="chart-header">
+        <h3>Merchant Activity Trend</h3>
+      </div>
+      <div class="chart-content" #chartContainer (mousemove)="onChartMouseMove($event)" (mouseleave)="hideTooltip()">
+        <svg class="line-chart" viewBox="0 0 800 300">
+          <!-- Grid lines -->
+          <g class="grid">
+            <line *ngFor="let y of gridLinesY" [attr.x1]="50" [attr.y1]="y" [attr.x2]="750" [attr.y2]="y" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+          </g>
+
+          <!-- Active Merchants Line -->
+          <path [attr.d]="activeLinePath" fill="none" stroke="#38a169" stroke-width="2"/>
+          
+          <!-- New Merchants Line -->
+          <path [attr.d]="newLinePath" fill="none" stroke="#3b82f6" stroke-width="2"/>
+          
+          <!-- Churned Line -->
+          <path [attr.d]="churnedLinePath" fill="none" stroke="#e53e3e" stroke-width="2"/>
+
+          <!-- X-axis labels -->
+          <text *ngFor="let month of months; let i = index" 
+                [attr.x]="50 + (i * 140)" 
+                [attr.y]="280" 
+                text-anchor="middle" 
+                fill="#718096" 
+                font-size="12">{{ month }}</text>
+
+          <!-- Y-axis labels -->
+          <text *ngFor="let label of yAxisLabels; let i = index" 
+                [attr.x]="30" 
+                [attr.y]="50 + (i * 50)" 
+                text-anchor="end" 
+                fill="#718096" 
+                font-size="11">{{ label }}</text>
+        </svg>
+
+        <!-- Tooltip on hover -->
+        <div class="chart-tooltip" *ngIf="tooltipVisible" [style.left.px]="tooltipX" [style.top.px]="tooltipY">
+          <div class="tooltip-title">{{ tooltipData?.month }}</div>
+          <div class="tooltip-item">
+            <span class="tooltip-dot green"></span>
+            <span>Active: {{ tooltipData?.active }}</span>
+          </div>
+          <div class="tooltip-item">
+            <span class="tooltip-dot blue"></span>
+            <span>New: {{ tooltipData?.new }}</span>
+          </div>
+          <div class="tooltip-item">
+            <span class="tooltip-dot red"></span>
+            <span>Churned: {{ tooltipData?.churned }}</span>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="chart-legend">
+          <div class="legend-item">
+            <span class="legend-dot green"></span>
+            <span>Active Merchants</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot blue"></span>
+            <span>New Merchants</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot red"></span>
+            <span>Churned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lifecycle Distribution Donut Chart -->
+    <div class="chart-card small">
+      <div class="chart-header">
+        <h3>Lifecycle Distribution</h3>
+      </div>
+      <div class="donut-chart-container">
+        <svg viewBox="0 0 200 200" class="donut-chart">
+          <circle cx="100" cy="100" r="70" fill="none" [attr.stroke]="'#3b82f6'" stroke-width="30" 
+                  [attr.stroke-dasharray]="getCircumference() * 0.12 + ' ' + getCircumference()" 
+                  transform="rotate(-90 100 100)"/>
+          <circle cx="100" cy="100" r="70" fill="none" [attr.stroke]="'#38a169'" stroke-width="30" 
+                  [attr.stroke-dasharray]="getCircumference() * 0.66 + ' ' + getCircumference()" 
+                  [attr.stroke-dashoffset]="-getCircumference() * 0.12"
+                  transform="rotate(-90 100 100)"/>
+          <circle cx="100" cy="100" r="70" fill="none" [attr.stroke]="'#ed8936'" stroke-width="30" 
+                  [attr.stroke-dasharray]="getCircumference() * 0.11 + ' ' + getCircumference()" 
+                  [attr.stroke-dashoffset]="-getCircumference() * 0.78"
+                  transform="rotate(-90 100 100)"/>
+          <circle cx="100" cy="100" r="70" fill="none" [attr.stroke]="'#ecc94b'" stroke-width="30" 
+                  [attr.stroke-dasharray]="getCircumference() * 0.05 + ' ' + getCircumference()" 
+                  [attr.stroke-dashoffset]="-getCircumference() * 0.89"
+                  transform="rotate(-90 100 100)"/>
+        </svg>
+        
+        <!-- Legend -->
+        <div class="donut-legend">
+          <div class="donut-legend-item" *ngFor="let item of lifecycleDistribution">
+            <span class="donut-dot" [style.background-color]="item.color"></span>
+            <span class="donut-label">{{ item.name }}</span>
+            <span class="donut-value">{{ item.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three Column Section -->
+  <div class="three-column-row">
+    <!-- Recent Lifecycle Events -->
+    <div class="events-card">
+      <div class="section-header-small">
+        <h3>Recent Lifecycle Events</h3>
+      </div>
+      <div class="events-list">
+        <div class="event-item" *ngFor="let event of recentEvents">
+          <div class="event-icon" [ngClass]="event.type">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle *ngIf="event.type === 'success'" cx="12" cy="12" r="10"></circle>
+              <path *ngIf="event.type === 'success'" d="M9 12l2 2 4-4"></path>
+              <path *ngIf="event.type === 'warning'" d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <path *ngIf="event.type === 'error'" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
+              <line *ngIf="event.type === 'error'" x1="15" y1="9" x2="9" y2="15"></line>
+              <line *ngIf="event.type === 'error'" x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="event-details">
+            <div class="event-merchant">{{ event.merchant }}</div>
+            <div class="event-description">{{ event.description }}</div>
+            <div class="event-date">{{ event.date }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-card">
+      <div class="section-header-small">
+        <h3>Key Metrics</h3>
+      </div>
+      <div class="metrics-list">
+        <div class="metric-item" *ngFor="let metric of keyMetrics">
+          <div class="metric-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline *ngIf="metric.icon === 'trend'" points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline *ngIf="metric.icon === 'activity'" points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              <path *ngIf="metric.icon === 'users'" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle *ngIf="metric.icon === 'users'" cx="9" cy="7" r="4"></circle>
+              <path *ngIf="metric.icon === 'percent'" d="M9 18l6-12"></path>
+              <circle *ngIf="metric.icon === 'percent'" cx="6.5" cy="6.5" r="2.5"></circle>
+              <circle *ngIf="metric.icon === 'percent'" cx="17.5" cy="17.5" r="2.5"></circle>
+              <path *ngIf="metric.icon === 'refresh'" d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+              <rect *ngIf="metric.icon === 'calendar'" x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line *ngIf="metric.icon === 'calendar'" x1="16" y1="2" x2="16" y2="6"></line>
+              <line *ngIf="metric.icon === 'calendar'" x1="8" y1="2" x2="8" y2="6"></line>
+            </svg>
+          </div>
+          <div class="metric-info">
+            <div class="metric-label">{{ metric.label }}</div>
+            <div class="metric-value">{{ metric.value }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- At-Risk Alerts -->
+    <div class="alerts-card">
+      <div class="section-header-small">
+        <h3>At-Risk Alerts</h3>
+      </div>
+      <div class="alerts-list">
+        <div class="alert-item" *ngFor="let alert of atRiskAlerts" [ngClass]="alert.severity">
+          <div class="alert-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-merchant">{{ alert.merchant }}</div>
+            <div class="alert-message">{{ alert.message }}</div>
+            <button class="alert-action">Take Action →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Merchant Lifecycle Status Table -->
+  <div class="status-table-section">
+    <div class="section-header">
+      <div>
+        <h3>Merchant Lifecycle Status</h3>
+        <p class="section-subtitle">Monitor merchant health and engagement</p>
+      </div>
+      <div class="search-box-small">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search merchants..." [(ngModel)]="searchTerm" (input)="filterMerchants()">
+      </div>
+    </div>
+
+    <!-- Stage Filter Tabs -->
+    <div class="stage-tabs">
+      <button class="stage-tab" [class.active]="selectedStage === 'all'" (click)="filterByStage('all')">All</button>
+      <button class="stage-tab" [class.active]="selectedStage === 'new'" (click)="filterByStage('new')">New</button>
+      <button class="stage-tab" [class.active]="selectedStage === 'active'" (click)="filterByStage('active')">Active</button>
+      <button class="stage-tab" [class.active]="selectedStage === 'growth'" (click)="filterByStage('growth')">Growth</button>
+      <button class="stage-tab" [class.active]="selectedStage === 'at-risk'" (click)="filterByStage('at-risk')">At Risk</button>
+      <button class="stage-tab" [class.active]="selectedStage === 'dormant'" (click)="filterByStage('dormant')">Dormant</button>
+    </div>
+
+    <!-- Merchants Table -->
+    <div class="table-wrapper">
+      <table class="lifecycle-table">
+        <thead>
+          <tr>
+            <th>Merchant</th>
+            <th>Stage</th>
+            <th>Health Score</th>
+            <th>Monthly Volume</th>
+            <th>Trend</th>
+            <th>Engagement</th>
+            <th>Risk Level</th>
+            <th>Renewal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let merchant of filteredMerchants">
+            <td>
+              <div class="merchant-cell">
+                <div class="merchant-name">{{ merchant.name }}</div>
+                <div class="merchant-id">{{ merchant.id }}</div>
+              </div>
+            </td>
+            <td>
+              <span class="stage-badge" [ngClass]="merchant.stage.toLowerCase()">{{ merchant.stage }}</span>
+            </td>
+            <td>
+              <div class="health-score-cell">
+                <div class="health-bar">
+                  <div class="health-fill" [style.width.%]="merchant.healthScore" [ngClass]="getHealthColor(merchant.healthScore)"></div>
+                </div>
+                <span class="health-value">{{ merchant.healthScore }}</span>
+              </div>
+            </td>
+            <td class="volume-cell">{{ merchant.monthlyVolume }}</td>
+            <td>
+              <div class="trend-cell" [ngClass]="merchant.trend > 0 ? 'positive' : 'negative'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline *ngIf="merchant.trend > 0" points="18 15 12 9 6 15"></polyline>
+                  <polyline *ngIf="merchant.trend <= 0" points="6 9 12 15 18 9"></polyline>
+                </svg>
+                {{ merchant.trend > 0 ? '+' : '' }}{{ merchant.trend }}%
+              </div>
+            </td>
+            <td>
+              <div class="engagement-cell">
+                <div class="engagement-bar">
+                  <div class="engagement-fill" [style.width.%]="merchant.engagement" [ngClass]="getEngagementColor(merchant.engagement)"></div>
+                </div>
+                <span class="engagement-value">{{ merchant.engagement }}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="risk-badge" [ngClass]="merchant.riskLevel.toLowerCase()">{{ merchant.riskLevel }}</span>
+            </td>
+            <td class="renewal-cell">{{ merchant.renewal }}</td>
+            <td>
+              <button class="btn-more">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

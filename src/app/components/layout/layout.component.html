@@ -1,0 +1,17 @@
+<div class="layout-container">
+  <app-sidebar 
+    [isCollapsed]="isSidebarCollapsed" 
+    (toggleSidebar)="toggleSidebar()">
+  </app-sidebar>
+
+  <div class="main-wrapper">
+    <app-topbar 
+      [isSidebarCollapsed]="isSidebarCollapsed"
+      (toggleSidebar)="toggleSidebar()">
+    </app-topbar>
+
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

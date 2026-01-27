@@ -1,0 +1,99 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <div class="logo-brand">
+      <div class="logo-circle">
+        <img src="assets/CBZ_ALL_LOGO.pdf(1).png" alt="CBZ" class="logo-image">
+      </div>
+      <span class="brand-name" *ngIf="!isCollapsed">Merchant Admin</span>
+    </div>
+    
+    <button class="toggle-btn" (click)="onToggleSidebar()" *ngIf="!isCollapsed">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a 
+          [routerLink]="item.hasSubmenu ? null : item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="nav-link"
+          (click)="item.hasSubmenu ? toggleSubmenu(item.name) : null">
+          
+          <!-- Dashboard Icon -->
+          <svg *ngIf="item.icon === 'dashboard'" class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+
+          <!-- Merchants Icon -->
+          <svg *ngIf="item.icon === 'merchants'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+
+          <!-- Transactions Icon -->
+          <svg *ngIf="item.icon === 'transactions'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+
+          <!-- Payment Channels Icon -->
+          <svg *ngIf="item.icon === 'payment'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+          </svg>
+
+          <!-- Risk & Compliance Icon -->
+          <svg *ngIf="item.icon === 'risk'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+
+          <!-- Reports Icon -->
+          <svg *ngIf="item.icon === 'reports'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+
+          <!-- Settings Icon -->
+          <svg *ngIf="item.icon === 'settings'" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+          </svg>
+
+          <span class="nav-text" *ngIf="!isCollapsed">{{ item.name }}</span>
+          
+          <svg *ngIf="item.hasSubmenu && !isCollapsed" class="submenu-arrow" [class.open]="isSubmenuOpen(item.name)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        
+        <!-- Submenu -->
+        <ul class="submenu" *ngIf="item.hasSubmenu && isSubmenuOpen(item.name) && !isCollapsed">
+          <li *ngFor="let subitem of item.submenu">
+            <a class="submenu-link" [routerLink]="subitem.route" routerLinkActive="active">
+              {{ subitem.name }}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- User Profile at Bottom -->
+  <div class="user-profile" *ngIf="!isCollapsed">
+    <div class="user-avatar">PM</div>
+    <div class="user-info">
+      <div class="user-name">Precious Makadho</div>
+    </div>
+  </div>
+</aside>

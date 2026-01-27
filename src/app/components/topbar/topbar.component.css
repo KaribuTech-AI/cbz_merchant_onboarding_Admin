@@ -1,0 +1,135 @@
+/* Top Bar */
+.top-bar {
+  background: #ffffff;
+  padding: 20px 32px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-bar-left h2 {
+  font-size: 24px;
+  color: #1a202c;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.top-bar-subtitle {
+  font-size: 13px;
+  color: #718096;
+}
+
+.hamburger-btn {
+  background: transparent;
+  border: none;
+  color: #4a5568;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: #f7fafc;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  gap: 8px;
+  width: 320px;
+}
+
+.search-icon {
+  color: #a0aec0;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #2d3748;
+  width: 100%;
+}
+
+.search-box input::placeholder {
+  color: #a0aec0;
+}
+
+.notification-btn,
+.user-btn {
+  background: transparent;
+  border: none;
+  color: #4a5568;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.notification-btn:hover,
+.user-btn:hover {
+  background: #f7fafc;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #c53030;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+  }
+
+  .top-bar-left {
+    width: 100%;
+  }
+
+  .top-bar-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+}

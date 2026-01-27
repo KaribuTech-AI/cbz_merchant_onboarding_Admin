@@ -1,0 +1,519 @@
+<div class="merchants-container">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-text">
+          <div class="stat-label">Total Merchants</div>
+          <div class="stat-value">2,847</div>
+          <div class="stat-change positive">+45 this month</div>
+        </div>
+        <div class="stat-icon merchant-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-text">
+          <div class="stat-label">Active</div>
+          <div class="stat-value green">2,654</div>
+          <div class="stat-change positive">93.2%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-text">
+          <div class="stat-label">Suspended</div>
+          <div class="stat-value red">89</div>
+          <div class="stat-change negative">3.1%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-text">
+          <div class="stat-label">Under Review</div>
+          <div class="stat-value orange">104</div>
+          <div class="stat-change positive">3.7%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Merchants Table Section -->
+  <div class="merchants-section">
+    <div class="section-header">
+      <div>
+        <h2>All Merchants</h2>
+        <p class="section-subtitle">Manage and monitor your merchant portfolio</p>
+      </div>
+      <button class="btn-add-merchant" (click)="openAddMerchantModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Merchant
+      </button>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="table-controls">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search by name or ID..." [(ngModel)]="searchTerm" (input)="filterMerchants()">
+      </div>
+      
+      <div class="filter-controls">
+        <select class="filter-select" [(ngModel)]="selectedStatus" (change)="filterMerchants()">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+          <option value="under-review">Under Review</option>
+        </select>
+        
+        <select class="filter-select" [(ngModel)]="selectedSegment" (change)="filterMerchants()">
+          <option value="">All Segments</option>
+          <option value="Corporate">Corporate</option>
+          <option value="SME">SME</option>
+        </select>
+        
+        <button class="btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+        </button>
+        
+        <button class="btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export
+        </button>
+      </div>
+    </div>
+
+    <!-- Merchants Table -->
+    <div class="table-wrapper">
+      <table class="merchants-table">
+        <thead>
+          <tr>
+            <th>Merchant ID</th>
+            <th>Business Name</th>
+            <th>Category</th>
+            <th>Segment</th>
+            <th>Status</th>
+            <th>Risk Tier</th>
+            <th>Channels</th>
+            <th>Monthly Volume</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let merchant of filteredMerchants" (click)="openMerchantDetails(merchant)">
+            <td class="merchant-id">{{ merchant.id }}</td>
+            <td>
+              <div class="merchant-name-cell">
+                <div class="business-name">{{ merchant.businessName }}</div>
+                <div class="trading-name">{{ merchant.tradingName }}</div>
+              </div>
+            </td>
+            <td>{{ merchant.category }}</td>
+            <td>
+              <span class="segment-badge">{{ merchant.segment }}</span>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="merchant.status">{{ merchant.status }}</span>
+            </td>
+            <td>
+              <span class="risk-badge" [ngClass]="merchant.riskTier.toLowerCase()">{{ merchant.riskTier }}</span>
+            </td>
+            <td>
+              <div class="channels">
+                <span class="channel-badge" *ngFor="let channel of merchant.channels">{{ channel }}</span>
+              </div>
+            </td>
+            <td class="volume">{{ merchant.monthlyVolume }}</td>
+            <td>
+              <button class="btn-more" (click)="$event.stopPropagation(); toggleMerchantMenu(merchant)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span class="pagination-info">Showing {{ filteredMerchants.length }} of {{ merchants.length }} merchants</span>
+      <div class="pagination-controls">
+        <button class="btn-pagination" [disabled]="true">Previous</button>
+        <button class="btn-pagination">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Merchant Modal -->
+  <div class="modal-overlay" *ngIf="showAddMerchantModal" (click)="closeAddMerchantModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h3>Add New Merchant</h3>
+          <p>Register a new merchant to the platform</p>
+        </div>
+        <button class="btn-close" (click)="closeAddMerchantModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <form class="modal-body" (submit)="$event.preventDefault(); createMerchant()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" placeholder="Enter business name" [(ngModel)]="newMerchant.businessName" name="businessName" required>
+          </div>
+          <div class="form-group">
+            <label>Trading Name</label>
+            <input type="text" placeholder="Enter trading name" [(ngModel)]="newMerchant.tradingName" name="tradingName">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="newMerchant.category" name="category" required>
+              <option value="">Select category</option>
+              <option value="Retail">Retail</option>
+              <option value="Food & Beverage">Food & Beverage</option>
+              <option value="Telecommunications">Telecommunications</option>
+              <option value="Fuel & Energy">Fuel & Energy</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Segment</label>
+            <select [(ngModel)]="newMerchant.segment" name="segment" required>
+              <option value="">Select segment</option>
+              <option value="Corporate">Corporate</option>
+              <option value="SME">SME</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="business@example.co.zw" [(ngModel)]="newMerchant.email" name="email">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" placeholder="+263 7X XXX XXXX" [(ngModel)]="newMerchant.phone" name="phone">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" placeholder="Enter business address" [(ngModel)]="newMerchant.address" name="address">
+        </div>
+        
+        <div class="form-group">
+          <label>Payment Channels</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="newMerchant.channels.pos" name="pos">
+              <span>POS</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="newMerchant.channels.ecommerce" name="ecommerce">
+              <span>E-Commerce</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="newMerchant.channels.qr" name="qr">
+              <span>QR Payments</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="newMerchant.channels.mobile" name="mobile">
+              <span>Mobile</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeAddMerchantModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Create Merchant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Merchant Details Sidebar -->
+  <div class="sidebar-overlay" *ngIf="showMerchantDetails" (click)="closeMerchantDetails()">
+    <div class="sidebar-panel" (click)="$event.stopPropagation()">
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <div class="sidebar-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+          <div>
+            <h3>{{ selectedMerchant?.businessName }}</h3>
+            <p>{{ selectedMerchant?.id }} | {{ selectedMerchant?.tradingName }}</p>
+          </div>
+        </div>
+        <button class="btn-close" (click)="closeMerchantDetails()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Status Badges -->
+      <div class="sidebar-status-bar">
+        <span class="status-badge" [ngClass]="selectedMerchant?.status">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="12"></circle>
+          </svg>
+          {{ selectedMerchant?.status }}
+        </span>
+        <span class="risk-badge-status" [ngClass]="selectedMerchant?.riskTier?.toLowerCase()">
+          Risk: {{ selectedMerchant?.riskTier }} (23)
+        </span>
+        <span class="date-badge">Since {{ selectedMerchant?.since }}</span>
+      </div>
+
+      <!-- Key Stats -->
+      <div class="sidebar-stats-grid">
+        <div class="stat-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c53030" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <div>
+            <div class="stat-mini-value">{{ selectedMerchant?.monthlyVolume }}</div>
+            <div class="stat-mini-label">Monthly Volume</div>
+          </div>
+        </div>
+
+        <div class="stat-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b6cb0" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          <div>
+            <div class="stat-mini-value">{{ selectedMerchant?.monthlyTxns || '12,456' }}</div>
+            <div class="stat-mini-label">Monthly Txns</div>
+          </div>
+        </div>
+
+        <div class="stat-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2f855a" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <div>
+            <div class="stat-mini-value">{{ selectedMerchant?.terminals || '34/35' }}</div>
+            <div class="stat-mini-label">Terminals</div>
+          </div>
+        </div>
+
+        <div class="stat-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c05621" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          </svg>
+          <div>
+            <div class="stat-mini-value">{{ selectedMerchant?.chargebackRate || '0.08%' }}</div>
+            <div class="stat-mini-label">Chargeback Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volume Trend -->
+      <div class="sidebar-section">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          Volume Trend (Last 6 Months)
+        </h4>
+        <div class="mini-chart">
+          <svg viewBox="0 0 400 80" preserveAspectRatio="none">
+            <polyline points="0,60 66,50 133,55 200,45 267,40 333,38 400,35" 
+                      fill="none" 
+                      stroke="#c53030" 
+                      stroke-width="2"
+                      vector-effect="non-scaling-stroke"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="sidebar-tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'business'" (click)="activeTab = 'business'">Business</button>
+        <button class="tab-btn" [class.active]="activeTab === 'contact'" (click)="activeTab = 'contact'">Contact</button>
+        <button class="tab-btn" [class.active]="activeTab === 'settlement'" (click)="activeTab = 'settlement'">Settlement</button>
+        <button class="tab-btn" [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">Transactions</button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content-area">
+        <!-- Business Tab -->
+        <div *ngIf="activeTab === 'business'" class="tab-content">
+          <div class="info-grid">
+            <div class="info-row">
+              <span class="info-label">Category</span>
+              <span class="info-value">{{ selectedMerchant?.category }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Segment</span>
+              <span class="info-value">{{ selectedMerchant?.segment }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Registration No.</span>
+              <span class="info-value">{{ selectedMerchant?.registrationNo || 'BN2018/098765' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Tax ID</span>
+              <span class="info-value">{{ selectedMerchant?.taxId || '1234567890' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Employees</span>
+              <span class="info-value">{{ selectedMerchant?.employees || '620' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Locations</span>
+              <span class="info-value">{{ selectedMerchant?.locations || '18' }}</span>
+            </div>
+            <div class="info-row full-width">
+              <span class="info-label">Payment Channels</span>
+              <div class="channels">
+                <span class="channel-badge-sidebar" *ngFor="let channel of selectedMerchant?.channels">{{ channel }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Tab -->
+        <div *ngIf="activeTab === 'contact'" class="tab-content">
+          <div class="contact-person">
+            <div class="avatar-circle">{{ selectedMerchant?.contactPerson?.initials || 'SN' }}</div>
+            <div>
+              <div class="contact-name">{{ selectedMerchant?.contactPerson?.name || 'Sarah Ncube' }}</div>
+              <div class="contact-role">{{ selectedMerchant?.contactPerson?.role || 'CFO' }}</div>
+            </div>
+          </div>
+          
+          <div class="contact-list">
+            <div class="contact-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <span>{{ selectedMerchant?.contactPerson?.email || 'finance@ok.co.zw' }}</span>
+            </div>
+            <div class="contact-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <span>{{ selectedMerchant?.contactPerson?.phone || '+263 77 234 5678' }}</span>
+            </div>
+            <div class="contact-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>{{ selectedMerchant?.contactPerson?.address || '45 Nelson Mandela Ave, Harare' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settlement Tab -->
+        <div *ngIf="activeTab === 'settlement'" class="tab-content">
+          <div class="info-grid">
+            <div class="info-row">
+              <span class="info-label">Settlement Account</span>
+              <span class="info-value">{{ selectedMerchant?.settlementAccount || 'CBZ ****7832' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Settlement Cycle</span>
+              <span class="info-value">{{ selectedMerchant?.settlementCycle || 'T+1' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Fee Rate</span>
+              <span class="info-value">{{ selectedMerchant?.feeRate || '1.50%' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Avg Transaction Value</span>
+              <span class="info-value">{{ selectedMerchant?.avgTxnValue || '$15.17' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Open Disputes</span>
+              <span class="info-value">{{ selectedMerchant?.openDisputes || '1' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Last Activity</span>
+              <span class="info-value">{{ selectedMerchant?.lastActivity || '2024-01-15 14:28:00' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div *ngIf="activeTab === 'transactions'" class="tab-content">
+          <div class="txn-list">
+            <div class="txn-row" *ngFor="let txn of selectedMerchant?.recentTransactions">
+              <div class="txn-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38a169" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+              </div>
+              <div class="txn-details">
+                <div class="txn-type">{{ txn.type }}</div>
+                <div class="txn-date">{{ txn.date }} | {{ txn.channel }}</div>
+              </div>
+              <div class="txn-amount">{{ txn.amount }}</div>
+              <span class="status-badge completed">{{ txn.status }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="sidebar-actions">
+        <button class="btn-edit-merchant">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit Merchant
+        </button>
+        <button class="btn-view-docs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          View Documents
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
