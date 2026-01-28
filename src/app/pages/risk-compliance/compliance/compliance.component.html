@@ -1,0 +1,259 @@
+<div class="compliance-container">
+
+
+  <!-- Score Cards -->
+  <div class="scores-grid">
+    <!-- Overall Score -->
+    <div class="score-card overall-score">
+      <div class="score-circle">
+        <svg viewBox="0 0 120 120" class="circular-chart">
+          <circle class="circle-bg" cx="60" cy="60" r="50" />
+          <circle class="circle-progress" cx="60" cy="60" r="50" 
+            [style.stroke-dasharray]="(overallScore / 100 * 314) + ' 314'" />
+        </svg>
+        <div class="score-value">{{ overallScore }}%</div>
+      </div>
+      <div class="score-label">Overall Score</div>
+    </div>
+
+    <!-- Individual Scores -->
+    <div *ngFor="let score of complianceScores" class="score-card">
+      <div class="score-header">
+        <span class="score-name">{{ score.label }}</span>
+        <div class="score-icon" [ngClass]="'icon-' + score.icon">
+          <svg *ngIf="score.icon === 'users'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <svg *ngIf="score.icon === 'shield'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <svg *ngIf="score.icon === 'lock'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <svg *ngIf="score.icon === 'file-text'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div class="score-percentage">{{ score.score }}%</div>
+      <div class="score-bar">
+        <div class="score-fill" [style.width.%]="score.score"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Boxes -->
+  <div class="alert-boxes">
+    <div class="alert-box action-required">
+      <div class="alert-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">Action Required</div>
+        <div class="alert-text">{{ actionRequiredText }}</div>
+        <a href="#" class="alert-link" (click)="viewRequirements()">View Requirements</a>
+      </div>
+    </div>
+
+    <div class="alert-box upcoming-deadlines">
+      <div class="alert-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">Upcoming Deadlines</div>
+        <div class="alert-text">{{ upcomingDeadlines }}</div>
+        <a href="#" class="alert-link" (click)="viewCalendar()">View Calendar</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Requirements Table -->
+  <div class="table-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Compliance Requirements</h3>
+        <p class="card-subtitle">Track and manage regulatory compliance</p>
+      </div>
+      <button class="export-btn" (click)="exportReport()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Export Report
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="table-filters">
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'all'"
+        (click)="setFilter('all')">
+        All
+      </button>
+      <button 
+        class="filter-btn filter-action" 
+        [class.active]="activeFilter === 'action-required'"
+        (click)="setFilter('action-required')">
+        Action Required
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'kyc-kyb'"
+        (click)="setFilter('kyc-kyb')">
+        KYC/KYB
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'aml'"
+        (click)="setFilter('aml')">
+        AML
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'pci-dss'"
+        (click)="setFilter('pci-dss')">
+        PCI-DSS
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>Category</th>
+            <th>Compliance</th>
+            <th>Status</th>
+            <th>Last Review</th>
+            <th>Next Review</th>
+            <th>Owner</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of filteredRequirements" class="table-row">
+            <td class="requirement-name">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              {{ req.requirement }}
+            </td>
+            <td class="category">{{ req.category }}</td>
+            <td>
+              <div class="compliance-score" [ngClass]="getComplianceClass(req.compliance)">
+                <div class="compliance-bar">
+                  <div class="compliance-fill" [style.width.%]="req.compliance"></div>
+                </div>
+                <span class="compliance-value">{{ req.compliance }}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(req.status)">
+                <span class="status-dot"></span>
+                {{ req.status === 'action-required' ? 'action-required' : req.status }}
+              </span>
+            </td>
+            <td class="date">{{ req.lastReview }}</td>
+            <td class="date" [class.highlight]="req.status === 'action-required'">{{ req.nextReview }}</td>
+            <td class="owner">{{ req.owner }}</td>
+            <td class="actions">
+              <button class="action-btn" (click)="viewRequirement(req.id)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="bottom-grid">
+    <!-- Recent Audits -->
+    <div class="info-card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Recent Audits</h3>
+          <p class="card-subtitle">Internal and external audit history</p>
+        </div>
+      </div>
+      <div class="audit-list">
+        <div *ngFor="let audit of recentAudits" class="audit-item">
+          <div class="audit-icon" [ngClass]="getAuditStatusClass(audit.status)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <div class="audit-content">
+            <div class="audit-name">{{ audit.name }}</div>
+            <div class="audit-type">{{ audit.type }}</div>
+            <div class="audit-date">{{ audit.date }}</div>
+          </div>
+          <div class="audit-status">
+            <span class="audit-badge" [ngClass]="getAuditStatusClass(audit.status)">
+              {{ audit.status }}
+            </span>
+            <span class="audit-findings">{{ audit.findings }} findings</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regulatory Reports -->
+    <div class="info-card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Regulatory Reports</h3>
+          <p class="card-subtitle">Upcoming regulatory submissions</p>
+        </div>
+      </div>
+      <div class="report-list">
+        <div *ngFor="let report of regulatoryReports" class="report-item">
+          <div class="report-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div class="report-content">
+            <div class="report-name">{{ report.name }}</div>
+            <div class="report-due">Due: {{ report.dueDate }}</div>
+          </div>
+          <div class="report-status">
+            <span class="report-badge" [ngClass]="getReportStatusClass(report.status)">
+              {{ report.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

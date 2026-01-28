@@ -1,0 +1,300 @@
+<div class="fraud-detection-container">
+
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card stat-danger">
+      <div class="stat-content">
+        <div class="stat-label">Fraud Alerts (Today)</div>
+        <div class="stat-value">{{ fraudAlertsToday }}</div>
+        <div class="stat-change negative">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>{{ Math.abs(alertsChange) }}% vs yesterday</span>
+        </div>
+      </div>
+      <div class="stat-icon danger-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card stat-blocked">
+      <div class="stat-content">
+        <div class="stat-label">Blocked Transactions</div>
+        <div class="stat-value">{{ blockedTransactions }}</div>
+        <div class="stat-subtext">${{ blockedAmount.toLocaleString() }} prevented</div>
+      </div>
+      <div class="stat-icon blocked-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card stat-warning">
+      <div class="stat-content">
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-value">{{ pendingReview }}</div>
+        <div class="stat-subtext">Requires attention</div>
+      </div>
+      <div class="stat-icon warning-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card stat-success">
+      <div class="stat-content">
+        <div class="stat-label">Detection Rate</div>
+        <div class="stat-value">{{ detectionRate }}%</div>
+        <div class="stat-change positive">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>+{{ detectionChange }}% improvement</span>
+        </div>
+      </div>
+      <div class="stat-icon success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <!-- Trend Chart -->
+    <div class="chart-card trend-chart">
+      <div class="card-header">
+        <h3 class="card-title">Fraud Alert Trend (Today)</h3>
+      </div>
+      <div class="chart-content">
+        <svg class="line-chart" viewBox="0 0 500 200" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color: rgba(239, 68, 68, 0.2); stop-opacity: 1"/>
+              <stop offset="100%" style="stop-color: rgba(239, 68, 68, 0); stop-opacity: 1"/>
+            </linearGradient>
+            <linearGradient id="chartGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color: rgba(185, 28, 28, 0.2); stop-opacity: 1"/>
+              <stop offset="100%" style="stop-color: rgba(185, 28, 28, 0); stop-opacity: 1"/>
+            </linearGradient>
+          </defs>
+          
+          <!-- Line 1 -->
+          <path class="chart-line-fill" d="M 0 170 L 83.33 140 L 166.66 120 L 250 100 L 333.33 125 L 416.66 155 L 500 170 L 500 200 L 0 200 Z" fill="url(#chartGradient1)"/>
+          <path class="chart-line" d="M 0 170 L 83.33 140 L 166.66 120 L 250 100 L 333.33 125 L 416.66 155 L 500 170" stroke="#ef4444" stroke-width="2.5" fill="none"/>
+          
+          <!-- Line 2 -->
+          <path class="chart-line-fill" d="M 0 180 L 83.33 155 L 166.66 135 L 250 115 L 333.33 138 L 416.66 165 L 500 180 L 500 200 L 0 200 Z" fill="url(#chartGradient2)"/>
+          <path class="chart-line" d="M 0 180 L 83.33 155 L 166.66 135 L 250 115 L 333.33 138 L 416.66 165 L 500 180" stroke="#b91c1c" stroke-width="2.5" fill="none"/>
+          
+          <!-- Data points -->
+          <circle cx="0" cy="170" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="83.33" cy="140" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="166.66" cy="120" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="250" cy="100" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="333.33" cy="125" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="416.66" cy="155" r="4" fill="#ef4444" class="chart-dot"/>
+          <circle cx="500" cy="170" r="4" fill="#ef4444" class="chart-dot"/>
+        </svg>
+        <div class="chart-labels">
+          <span *ngFor="let point of chartData" class="chart-label">{{ point.time }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fraud by Type -->
+    <div class="chart-card donut-chart">
+      <div class="card-header">
+        <h3 class="card-title">Fraud by Type</h3>
+      </div>
+      <div class="chart-content donut-content">
+        <div class="donut-container">
+          <svg class="donut-svg" viewBox="0 0 200 200">
+            <circle class="donut-hole" cx="100" cy="100" r="60" fill="transparent"/>
+            
+            <!-- Donut segments -->
+            <circle class="donut-segment" cx="100" cy="100" r="80" fill="transparent" stroke="#dc2626" stroke-width="40"
+              stroke-dasharray="220 628" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+            <circle class="donut-segment" cx="100" cy="100" r="80" fill="transparent" stroke="#f59e0b" stroke-width="40"
+              stroke-dasharray="157 628" stroke-dashoffset="-220" transform="rotate(-90 100 100)"/>
+            <circle class="donut-segment" cx="100" cy="100" r="80" fill="transparent" stroke="#3b82f6" stroke-width="40"
+              stroke-dasharray="125 628" stroke-dashoffset="-377" transform="rotate(-90 100 100)"/>
+            <circle class="donut-segment" cx="100" cy="100" r="80" fill="transparent" stroke="#8b5cf6" stroke-width="40"
+              stroke-dasharray="75 628" stroke-dashoffset="-502" transform="rotate(-90 100 100)"/>
+            <circle class="donut-segment" cx="100" cy="100" r="80" fill="transparent" stroke="#6b7280" stroke-width="40"
+              stroke-dasharray="50 628" stroke-dashoffset="-577" transform="rotate(-90 100 100)"/>
+          </svg>
+        </div>
+        <div class="donut-legend">
+          <div *ngFor="let type of fraudTypes" class="legend-item">
+            <div class="legend-dot" [style.background-color]="type.color"></div>
+            <div class="legend-content">
+              <div class="legend-label">{{ type.name }}</div>
+              <div class="legend-value">{{ type.percentage }}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fraud Alerts Table -->
+  <div class="table-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Fraud Alerts</h3>
+        <p class="card-subtitle">Review and manage suspicious transactions</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="table-filters">
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'all'"
+        (click)="setFilter('all')">
+        All Alerts
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'pending'"
+        (click)="setFilter('pending')">
+        Pending Review
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'blocked'"
+        (click)="setFilter('blocked')">
+        Blocked
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="activeFilter === 'approved'"
+        (click)="setFilter('approved')">
+        Approved
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Alert ID</th>
+            <th>Transaction</th>
+            <th>Card</th>
+            <th>Amount</th>
+            <th>Risk Score</th>
+            <th>Type</th>
+            <th>Flags</th>
+            <th>Status</th>
+            <th>Time</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alert of filteredAlerts" class="table-row">
+            <td class="alert-id">{{ alert.alertId }}</td>
+            <td class="transaction-name">{{ alert.transaction }}</td>
+            <td class="card-number">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              {{ alert.card }}
+            </td>
+            <td class="amount">${{ alert.amount.toLocaleString() }}</td>
+            <td>
+              <div class="risk-score {{ getRiskScoreClass(alert.riskScore) }}">
+                <div class="risk-bar">
+                  <div class="risk-fill" [style.width.%]="alert.riskScore"></div>
+                </div>
+                <span class="risk-value">{{ alert.riskScore }}</span>
+              </div>
+            </td>
+            <td class="alert-type">{{ alert.type }}</td>
+            <td class="flags">
+              <span *ngFor="let flag of alert.flags" class="flag-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                {{ flag }}
+              </span>
+            </td>
+            <td>
+              <span class="status-badge {{ getStatusClass(alert.status) }}">
+                <span class="status-dot"></span>
+                {{ alert.status }}
+              </span>
+            </td>
+            <td class="time">{{ alert.time }}</td>
+            <td class="actions">
+              <button class="action-btn" (click)="viewAlertDetails(alert.alertId)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Blocked Cards Table -->
+  <div class="table-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Recently Blocked Cards</h3>
+        <p class="card-subtitle">Cards blocked due to fraud detection</p>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Card Number</th>
+            <th>Blocked Date</th>
+            <th>Reason</th>
+            <th>Related Merchant</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let card of blockedCards" class="table-row">
+            <td class="card-number">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              {{ card.cardNumber }}
+            </td>
+            <td>{{ card.blockedDate }}</td>
+            <td>{{ card.reason }}</td>
+            <td>{{ card.merchant }}</td>
+            <td class="actions">
+              <button class="unblock-btn" (click)="unblockCard(card.cardNumber)">
+                Unblock
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

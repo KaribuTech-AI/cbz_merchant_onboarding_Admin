@@ -1,0 +1,219 @@
+<div class="disputes-container">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card stat-warning">
+      <div class="stat-header">
+        <div class="stat-content">
+          <div class="stat-label">Open Disputes</div>
+          <div class="stat-value">{{ openDisputes }}</div>
+          <div class="stat-note">{{ openDisputesRisk }}</div>
+        </div>
+        <div class="stat-icon icon-warning">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-alert">
+      <div class="stat-header">
+        <div class="stat-content">
+          <div class="stat-label">Evidence Required</div>
+          <div class="stat-value">{{ evidenceRequired }}</div>
+          <div class="stat-note alert">{{ evidenceRequiredNote }}</div>
+        </div>
+        <div class="stat-icon icon-alert">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-success">
+      <div class="stat-header">
+        <div class="stat-content">
+          <div class="stat-label">Win Rate</div>
+          <div class="stat-value">{{ winRate }}%</div>
+          <div class="stat-note success">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+            {{ winRateChange }}
+          </div>
+        </div>
+        <div class="stat-icon icon-success">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="winRate"></div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-info">
+      <div class="stat-header">
+        <div class="stat-content">
+          <div class="stat-label">Avg Resolution</div>
+          <div class="stat-value">{{ avgResolution }} {{ avgResolutionUnit }}</div>
+        </div>
+        <div class="stat-icon icon-info">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <!-- Disputes by Reason Code -->
+    <div class="chart-card">
+      <h3 class="chart-title">Disputes by Reason Code</h3>
+      <p class="chart-subtitle">Top dispute reasons this month</p>
+      
+      <div class="bar-chart">
+        <div class="chart-grid">
+          <div class="grid-line" *ngFor="let i of [0,1,2,3,4]"></div>
+        </div>
+        <div class="chart-y-axis">
+          <span class="y-label">12</span>
+          <span class="y-label">9</span>
+          <span class="y-label">6</span>
+          <span class="y-label">3</span>
+          <span class="y-label">0</span>
+        </div>
+        <div class="chart-bars">
+          <div class="bar-group" *ngFor="let item of reasonsData">
+            <div class="bar-wrapper">
+              <div class="bar" [style.height.%]="getBarHeight(item.count)">
+                <span class="bar-value">{{ item.count }}</span>
+              </div>
+            </div>
+            <div class="bar-label">{{ item.reason }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA Status -->
+    <div class="chart-card sla-card">
+      <h3 class="chart-title">SLA Status</h3>
+      <p class="chart-subtitle">Disputes by response deadline</p>
+      
+      <div class="sla-list">
+        <div class="sla-item" *ngFor="let item of slaItems" [class]="'sla-' + item.type">
+          <div class="sla-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" *ngIf="item.type === 'normal'"></circle>
+              <circle cx="12" cy="12" r="10" *ngIf="item.type === 'urgent'"></circle>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" *ngIf="item.type === 'overdue'"></path>
+            </svg>
+          </div>
+          <div class="sla-content">
+            <div class="sla-label">{{ item.label }}</div>
+            <div class="sla-description">{{ item.description }}</div>
+          </div>
+          <div class="sla-count">{{ item.count }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dispute Cases Section -->
+  <div class="disputes-management-container">
+    <div class="disputes-header">
+      <h3 class="section-title">Dispute Cases</h3>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button 
+        *ngFor="let filter of filters"
+        [class.active]="selectedFilter === filter"
+        (click)="setFilter(filter)"
+        class="filter-tab"
+      >
+        {{ filter }}
+      </button>
+    </div>
+
+    <!-- Disputes Table -->
+    <div class="table-container">
+      <table class="disputes-table">
+        <thead>
+          <tr>
+            <th>Dispute ID</th>
+            <th>Merchant</th>
+            <th>Reason</th>
+            <th>Card Scheme</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Days Left</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dispute of filteredDisputes">
+            <td class="dispute-id-cell">{{ dispute.id }}</td>
+            <td>
+              <div class="merchant-info">
+                <div class="merchant-name">{{ dispute.merchant }}</div>
+                <div class="merchant-id">{{ dispute.merchantId }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="reason-info">
+                <div class="reason-text">{{ dispute.reason }}</div>
+                <div class="reason-code">{{ dispute.reasonCode }}</div>
+              </div>
+            </td>
+            <td>
+              <span class="card-scheme-badge">{{ dispute.cardScheme }}</span>
+            </td>
+            <td class="amount-cell">{{ formatAmount(dispute.amount) }}</td>
+            <td>
+              <span [class]="'status-badge ' + getStatusClass(dispute.status)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" *ngIf="dispute.status === 'open'">
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" *ngIf="dispute.status === 'evidence_required'">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                {{ getStatusLabel(dispute.status) }}
+              </span>
+            </td>
+            <td class="date-cell">{{ dispute.dueDate }}</td>
+            <td>
+              <span [class]="'days-badge ' + getDaysLeftClass(dispute.daysLeft)">
+                {{ dispute.daysLeft }} days
+              </span>
+            </td>
+            <td>
+              <button class="btn-more">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <circle cx="12" cy="19" r="2"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
