@@ -1,0 +1,271 @@
+<div class="dashboard-container">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Active Integrations</span>
+        <div class="stat-icon icon-integrations">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ activeIntegrations }}</div>
+      <div class="stat-change positive">{{ activeIntegrationsChange }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Daily Volume</span>
+        <div class="stat-icon icon-volume">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">${{ dailyVolume.toLocaleString() }}</div>
+      <div class="stat-change positive">{{ dailyVolumeChange }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Daily Transactions</span>
+        <div class="stat-icon icon-transactions">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ dailyTransactions }}</div>
+      <div class="stat-change neutral">Avg. {{ successRate }}% success rate</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Avg Response Time</span>
+        <div class="stat-icon icon-response">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-value">{{ avgResponseTime }}ms</div>
+      <div class="stat-change positive">{{ responseTimeChange }}</div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-container">
+    <h3 class="chart-title">E-Commerce Transaction Volume (Today)</h3>
+    <svg class="chart-svg" viewBox="0 0 1200 250" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.1" />
+          <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0" />
+        </linearGradient>
+      </defs>
+      
+      <!-- Grid lines -->
+      <line x1="20" y1="50" x2="1180" y2="50" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="20" y1="100" x2="1180" y2="100" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="20" y1="150" x2="1180" y2="150" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="20" y1="200" x2="1180" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+      
+      <!-- Y-axis labels -->
+      <text x="5" y="35" font-size="12" fill="#6b7280">$100k</text>
+      <text x="10" y="85" font-size="12" fill="#6b7280">$75k</text>
+      <text x="10" y="135" font-size="12" fill="#6b7280">$50k</text>
+      <text x="10" y="185" font-size="12" fill="#6b7280">$25k</text>
+      <text x="20" y="220" font-size="12" fill="#6b7280">$0k</text>
+      
+      <!-- X-axis labels -->
+      <text x="20" y="240" font-size="12" fill="#6b7280">00:00</text>
+      <text x="250" y="240" font-size="12" fill="#6b7280">04:00</text>
+      <text x="480" y="240" font-size="12" fill="#6b7280">08:00</text>
+      <text x="710" y="240" font-size="12" fill="#6b7280">12:00</text>
+      <text x="940" y="240" font-size="12" fill="#6b7280">16:00</text>
+      <text x="1100" y="240" font-size="12" fill="#6b7280">20:00</text>
+      <text x="1155" y="240" font-size="12" fill="#6b7280">23:59</text>
+      
+      <!-- Area under curve -->
+      <path [attr.d]="getChartPath() + ' L 1180 220 L 20 220 Z'" fill="url(#lineGradient)"/>
+      
+      <!-- Line -->
+      <path [attr.d]="getChartPath()" stroke="#dc2626" stroke-width="2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Merchants Section -->
+  <div class="merchants-container">
+    <div class="merchants-header">
+      <div class="merchants-title-section">
+        <h3 class="merchants-title">E-Commerce Merchants</h3>
+        <p class="merchants-subtitle">Manage payment gateway integrations</p>
+      </div>
+      <div class="merchants-actions">
+        <div class="search-box">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Search merchants..." 
+            [(ngModel)]="searchQuery"
+            class="search-input"
+          />
+        </div>
+        <button class="btn-add-integration">
+          <span class="btn-icon">+</span>
+          Add Integration
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button 
+        *ngFor="let filter of filters"
+        [class.active]="selectedFilter === filter"
+        (click)="setFilter(filter)"
+        class="filter-tab"
+      >
+        {{ filter }}
+      </button>
+    </div>
+
+    <!-- Merchants Table -->
+    <div class="table-container">
+      <table class="merchants-table">
+        <thead>
+          <tr>
+            <th>Merchant</th>
+            <th>Status</th>
+            <th>SSL</th>
+            <th>PCI</th>
+            <th>Daily Volume</th>
+            <th>Success Rate</th>
+            <th>Response Time</th>
+            <th>Cards</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let merchant of filteredMerchants">
+            <td>
+              <div class="merchant-info">
+                <div class="merchant-name">{{ merchant.name }}</div>
+                <a [href]="'https://' + merchant.url" target="_blank" class="merchant-url">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                  {{ merchant.url }}
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+            </td>
+            <td>
+              <span [class]="'badge badge-' + merchant.status">
+                <span class="badge-dot"></span>
+                {{ merchant.status }}
+              </span>
+            </td>
+            <td>
+              <span [class]="'badge badge-' + merchant.ssl">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                {{ merchant.ssl }}
+              </span>
+            </td>
+            <td>
+              <span [class]="'badge badge-' + merchant.pci">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                {{ merchant.pci }}
+              </span>
+            </td>
+            <td class="volume-cell">{{ merchant.dailyVolume > 0 ? formatVolume(merchant.dailyVolume) : '$0' }}</td>
+            <td>
+              <div class="success-rate-container" *ngIf="merchant.successRate > 0">
+                <div class="success-rate-bar">
+                  <div 
+                    class="success-rate-fill" 
+                    [style.width]="getSuccessRateWidth(merchant.successRate)"
+                  ></div>
+                </div>
+                <span class="success-rate-text">{{ merchant.successRate }}%</span>
+              </div>
+              <span *ngIf="merchant.successRate === 0" class="text-muted">N/A</span>
+            </td>
+            <td class="response-time-cell" [class.text-muted]="merchant.responseTime === 'N/A'">
+              {{ merchant.responseTime }}
+            </td>
+            <td>
+              <div class="cards-container">
+                <span *ngFor="let card of merchant.cards" class="card-badge">{{ card }}</span>
+              </div>
+            </td>
+            <td>
+              <button class="btn-more">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <circle cx="12" cy="19" r="2"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- API Activity Section -->
+  <div class="api-activity-container">
+    <div class="api-activity-header">
+      <h3 class="api-activity-title">Recent API Activity</h3>
+      <p class="api-activity-subtitle">Live API request logs</p>
+    </div>
+
+    <div class="table-container">
+      <table class="api-activity-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Merchant</th>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let activity of apiActivities">
+            <td class="timestamp-cell">{{ activity.timestamp }}</td>
+            <td>{{ activity.merchant }}</td>
+            <td class="endpoint-cell">{{ activity.endpoint }}</td>
+            <td>
+              <span class="method-badge">{{ activity.method }}</span>
+            </td>
+            <td>
+              <span [class]="'status-badge ' + getMethodClass(activity.status)">
+                {{ activity.status }}
+              </span>
+            </td>
+            <td class="duration-cell">{{ activity.duration }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
