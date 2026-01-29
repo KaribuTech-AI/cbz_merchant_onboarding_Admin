@@ -9,12 +9,13 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./topbar.component.css']
 })
 export class TopbarComponent {
-  @Input() title: string = 'Dashboard';
-  @Input() subtitle: string = 'Overview of merchant acquiring operations';
-  @Input() isSidebarCollapsed: boolean = false;
+  @Input() title = '';
+  @Input() subtitle = '';
+  @Input() isSidebarCollapsed = false;
+
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  notificationCount: number = 3;
+  notificationCount = 3;
 
   onToggleSidebar(): void {
     this.toggleSidebar.emit();

@@ -1,0 +1,369 @@
+<div class="recurring-billing-container">
+
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div *ngFor="let summary of billingSummary" class="summary-card" [ngClass]="'card-' + summary.color">
+      <div class="summary-icon" [ngClass]="'icon-' + summary.color">
+        <svg *ngIf="summary.icon === 'repeat'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+        <svg *ngIf="summary.icon === 'dollar'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <svg *ngIf="summary.icon === 'users'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <svg *ngIf="summary.icon === 'trending-up'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <div class="summary-label">{{ summary.label }}</div>
+        <div class="summary-value">{{ summary.value }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Create Button -->
+  <div class="controls-section">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input 
+        type="text" 
+        class="search-input-large" 
+        placeholder="Search recurring billings..."
+        (input)="searchBillings($event)">
+    </div>
+    
+    <button class="create-btn" (click)="openCreateModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Create Recurring Billing
+    </button>
+  </div>
+
+  <!-- Billings Table -->
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Frequency</th>
+          <th>Next Billing</th>
+          <th>Status</th>
+          <th>Total Billed</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let billing of recurringBillings" class="table-row" (click)="viewBillingDetails(billing)">
+          <td class="billing-id">{{ billing.id }}</td>
+          <td class="description">
+            <div class="description-wrapper">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+              <span>{{ billing.description }}</span>
+            </div>
+          </td>
+          <td class="customer">{{ billing.customer }}</td>
+          <td class="amount">${{ billing.amount.toFixed(2) }}</td>
+          <td>
+            <span class="frequency-badge" [ngClass]="getFrequencyClass(billing.frequency)">
+              {{ billing.frequency }}
+            </span>
+          </td>
+          <td class="next-billing">
+            <div class="date-wrapper">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>{{ billing.nextBilling }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(billing.status)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="8"></circle>
+              </svg>
+              {{ billing.status | titlecase }}
+            </span>
+          </td>
+          <td class="total-billed">
+            <div class="total-wrapper">
+              <div class="total-amount">${{ billing.totalBilled.toLocaleString() }}</div>
+              <div class="cycles">{{ billing.cycles }} cycles</div>
+            </div>
+          </td>
+          <td class="actions" (click)="$event.stopPropagation()">
+            <button class="action-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Create Billing Modal -->
+<div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Create Recurring Billing</h2>
+        <p class="modal-subtitle">Set up a new recurring billing schedule for your customer.</p>
+      </div>
+      <button class="close-btn" (click)="closeCreateModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group full-width">
+        <label class="form-label">Billing Name</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          placeholder="e.g., Monthly Service Fee"
+          [(ngModel)]="newBilling.billingName">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Customer Name</label>
+          <input 
+            type="text" 
+            class="form-input" 
+            placeholder="Enter customer name"
+            [(ngModel)]="newBilling.customerName">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input 
+            type="email" 
+            class="form-input" 
+            placeholder="customer@example.com"
+            [(ngModel)]="newBilling.email">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input 
+            type="tel" 
+            class="form-input" 
+            placeholder="+263 77 XXX XXXX"
+            [(ngModel)]="newBilling.phone">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount ($)</label>
+          <input 
+            type="number" 
+            class="form-input" 
+            placeholder="0.00"
+            [(ngModel)]="newBilling.amount">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Billing Frequency</label>
+          <select class="form-select" [(ngModel)]="newBilling.frequency">
+            <option>Monthly</option>
+            <option>Quarterly</option>
+            <option>Yearly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input 
+            type="date" 
+            class="form-input" 
+            placeholder="yyyy/mm/dd"
+            [(ngModel)]="newBilling.startDate">
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label class="form-label">Address</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          placeholder="Enter customer address"
+          [(ngModel)]="newBilling.address">
+      </div>
+
+      <div class="form-group full-width">
+        <label class="form-label">Description (Optional)</label>
+        <textarea 
+          class="form-textarea" 
+          placeholder="Add billing description..."
+          rows="3"
+          [(ngModel)]="newBilling.description"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeCreateModal()">Cancel</button>
+      <button class="submit-btn" (click)="createBilling()">Create Billing</button>
+    </div>
+  </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal-overlay" *ngIf="showDetailsModal && selectedBilling" (click)="closeDetailsModal()">
+  <div class="modal-content details-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-left">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+        <div>
+          <h2 class="modal-title">{{ selectedBilling.description }}</h2>
+          <p class="modal-subtitle">Recurring billing details for {{ selectedBilling.id }}</p>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeDetailsModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body details-body">
+      <div class="details-header">
+        <span class="status-badge-large" [ngClass]="getStatusClass(selectedBilling.status)">
+          {{ selectedBilling.status | titlecase }}
+        </span>
+        <div class="billing-amount-large">
+          <div class="amount-label">Billing Amount</div>
+          <div class="amount-value">${{ selectedBilling.amount.toFixed(2) }}<span class="frequency-text">/month</span></div>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h3 class="section-title">Customer Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">{{ selectedBilling.customer }}</div>
+          </div>
+          <div class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <div class="info-label">{{ selectedBilling.email }}</div>
+          </div>
+          <div class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <div class="info-label">{{ selectedBilling.phone }}</div>
+          </div>
+          <div class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <div class="info-label">{{ selectedBilling.address }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h3 class="section-title">Billing Schedule</h3>
+        <div class="schedule-grid">
+          <div class="schedule-item">
+            <div class="schedule-label">Frequency</div>
+            <div class="schedule-value">
+              <span class="frequency-badge-large" [ngClass]="getFrequencyClass(selectedBilling.frequency)">
+                {{ selectedBilling.frequency }}
+              </span>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-label">Start Date</div>
+            <div class="schedule-value">{{ selectedBilling.startDate }}</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-label">Last Billed</div>
+            <div class="schedule-value">{{ selectedBilling.lastBilled }}</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-label">Next Billing</div>
+            <div class="schedule-value highlight">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{ selectedBilling.nextBilling }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-cards">
+        <div class="summary-card-small">
+          <div class="card-label">Total Billed</div>
+          <div class="card-value">${{ selectedBilling.totalBilled.toLocaleString() }}</div>
+        </div>
+        <div class="summary-card-small">
+          <div class="card-label">Billing Cycles</div>
+          <div class="card-value">{{ selectedBilling.cycles }}</div>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h3 class="section-title">Description:</h3>
+        <p class="description-text">{{ selectedBilling.billingDescription }}</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeDetailsModal()">Close</button>
+      <button class="edit-btn" (click)="editBilling()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit
+      </button>
+    </div>
+  </div>
+</div>

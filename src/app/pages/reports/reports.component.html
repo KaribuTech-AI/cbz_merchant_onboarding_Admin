@@ -1,1 +1,153 @@
-<p>reports works!</p>
+<div class="reports-container">
+  <!-- Report Categories Grid -->
+  <div class="categories-section">
+    <div class="categories-grid">
+      <div *ngFor="let category of reportCategories" class="category-card">
+        <div class="category-icon">{{ category.icon }}</div>
+        <div class="category-info">
+          <h3 class="category-title">{{ category.title }}</h3>
+          <p class="category-count">{{ category.count }} reports</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Actions Bar -->
+  <div class="actions-bar">
+    <div class="search-filter-group">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery"
+          placeholder="Search reports..." 
+          class="search-input">
+      </div>
+      <button class="filter-button" (click)="filterReports()">
+        <span class="filter-icon">⚙️</span>
+      </button>
+    </div>
+    <button class="create-report-btn" (click)="createReport()">
+      <span class="plus-icon">+</span>
+      Create Report
+    </button>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabs-container">
+    <div class="tabs-navigation">
+      <button 
+        [class.active]="activeTab === 'saved'"
+        (click)="setActiveTab('saved')"
+        class="tab-button">
+        Saved Reports
+      </button>
+      <button 
+        [class.active]="activeTab === 'templates'"
+        (click)="setActiveTab('templates')"
+        class="tab-button">
+        Templates
+      </button>
+      <button 
+        [class.active]="activeTab === 'downloads'"
+        (click)="setActiveTab('downloads')"
+        class="tab-button">
+        Recent Downloads
+      </button>
+    </div>
+  </div>
+
+  <!-- Saved Reports Section -->
+  <div class="reports-section" *ngIf="activeTab === 'saved'">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Saved Reports</h2>
+        <p class="section-subtitle">Manage your scheduled and saved report configurations</p>
+      </div>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="table-container">
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th class="th-report-name">Report Name</th>
+            <th class="th-category">Category</th>
+            <th class="th-type">Type</th>
+            <th class="th-frequency">Frequency</th>
+            <th class="th-last-run">Last Run</th>
+            <th class="th-next-run">Next Run</th>
+            <th class="th-format">Format</th>
+            <th class="th-status">Status</th>
+            <th class="th-actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let report of filteredReports" class="table-row">
+            <td class="td-report-name">
+              <span class="report-icon">📄</span>
+              {{ report.name }}
+            </td>
+            <td class="td-category">
+              <span class="category-badge">{{ report.category }}</span>
+            </td>
+            <td class="td-type">{{ report.type }}</td>
+            <td class="td-frequency">
+              <span class="frequency-icon" *ngIf="report.frequency !== 'N/A'">🕐</span>
+              {{ report.frequency }}
+            </td>
+            <td class="td-last-run">{{ report.lastRun }}</td>
+            <td class="td-next-run">{{ report.nextRun }}</td>
+            <td class="td-format">
+              <span class="format-badge" [class.format-pdf]="report.format === 'PDF'" [class.format-excel]="report.format === 'Excel'">
+                {{ report.format }}
+              </span>
+            </td>
+            <td class="td-status">
+              <span class="status-badge" [class.status-active]="report.status === 'active'" [class.status-paused]="report.status === 'paused'">
+                {{ report.status }}
+              </span>
+            </td>
+            <td class="td-actions">
+              <div class="action-buttons">
+                <button class="action-btn" (click)="refreshReport(report.id)" title="Refresh">
+                  <span class="action-icon">🔄</span>
+                </button>
+                <button class="action-btn" (click)="downloadReport(report.id)" title="Download">
+                  <span class="action-icon">⬇️</span>
+                </button>
+                <button class="action-btn" (click)="emailReport(report.id)" title="Email">
+                  <span class="action-icon">📧</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Templates Section -->
+  <div class="reports-section" *ngIf="activeTab === 'templates'">
+    <div class="section-header">
+      <h2 class="section-title">Report Templates</h2>
+      <p class="section-subtitle">Pre-built report templates ready to use</p>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p class="empty-text">Report templates will be displayed here</p>
+    </div>
+  </div>
+
+  <!-- Recent Downloads Section -->
+  <div class="reports-section" *ngIf="activeTab === 'downloads'">
+    <div class="section-header">
+      <h2 class="section-title">Recent Downloads</h2>
+      <p class="section-subtitle">Your recently downloaded reports</p>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">⬇️</div>
+      <p class="empty-text">Recent downloads will be displayed here</p>
+    </div>
+  </div>
+</div>

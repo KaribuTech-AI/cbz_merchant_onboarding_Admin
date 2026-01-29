@@ -1,0 +1,124 @@
+<div class="statements-container">
+  <!-- Current Period Summary -->
+  <div class="period-header">
+    <h2 class="period-title">Current Period Summary</h2>
+    <span class="period-badge">{{ currentPeriod }}</span>
+  </div>
+
+  <div class="summary-grid">
+    <div *ngFor="let summary of periodSummary" class="summary-card" [ngClass]="'card-' + summary.color">
+      <div class="summary-icon" [ngClass]="'icon-' + summary.color">
+        <svg *ngIf="summary.icon === 'dollar'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <svg *ngIf="summary.icon === 'trending-up'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+          <polyline points="17 6 23 6 23 12"></polyline>
+        </svg>
+        <svg *ngIf="summary.icon === 'trending-down'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+          <polyline points="17 18 23 18 23 12"></polyline>
+        </svg>
+      </div>
+      <div class="summary-content">
+        <div class="summary-label">{{ summary.label }}</div>
+        <div class="summary-value" [class.negative]="summary.isNegative">{{ summary.value }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filter-controls">
+      <select class="filter-select" [(ngModel)]="selectedYear" (change)="filterByYear(selectedYear)">
+        <option>2024</option>
+        <option>2023</option>
+        <option>2022</option>
+      </select>
+      
+      <select class="filter-select" [(ngModel)]="selectedQuarter" (change)="filterByQuarter(selectedQuarter)">
+        <option>All Quarters</option>
+        <option>Q1</option>
+        <option>Q2</option>
+        <option>Q3</option>
+        <option>Q4</option>
+      </select>
+    </div>
+    
+    <button class="download-all-btn" (click)="downloadAll()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Download All
+    </button>
+  </div>
+
+  <!-- Statements Table -->
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Statement ID</th>
+          <th>Period</th>
+          <th>Date Range</th>
+          <th>Opening</th>
+          <th>Credits</th>
+          <th>Debits</th>
+          <th>Closing</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let statement of statements" class="table-row">
+          <td class="statement-id">
+            <div class="id-wrapper">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>{{ statement.statementId }}</span>
+            </div>
+          </td>
+          <td class="period">{{ statement.period }}</td>
+          <td class="date-range">
+            <div class="date-wrapper">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>{{ statement.dateRange }}</span>
+            </div>
+          </td>
+          <td class="amount opening">${{ statement.opening.toLocaleString() }}</td>
+          <td class="amount credits">
+            <span class="credit-value">↑ ${{ statement.credits.toLocaleString() }}</span>
+          </td>
+          <td class="amount debits">
+            <span class="debit-value">↓ ${{ statement.debits.toLocaleString() }}</span>
+          </td>
+          <td class="amount closing">${{ statement.closing.toLocaleString() }}</td>
+          <td class="actions">
+            <button class="action-btn view-btn" (click)="viewStatement(statement.statementId)" title="View">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <button class="action-btn download-btn" (click)="downloadStatement(statement.statementId)" title="Download">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

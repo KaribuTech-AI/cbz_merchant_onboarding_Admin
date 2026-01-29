@@ -16,6 +16,7 @@ export class SidebarComponent {
   activeMerchantsSubmenu = false;
   activeTransactionsSubmenu = false;
   activePaymentChannelsSubmenu = false;
+  activeBillingSubmenu = false;
   activeRiskComplianceSubmenu = false;
 
   menuItems = [
@@ -43,7 +44,7 @@ export class SidebarComponent {
       hasSubmenu: true,
       submenu: [
         { name: 'All Transactions', route: '/transactions/all' },
-        { name: 'Settlement', route: '/transactions/settlement' }  // Changed from /settlements to /settlement
+        { name: 'Settlement', route: '/transactions/settlement' }
       ]
     },
     { 
@@ -52,9 +53,21 @@ export class SidebarComponent {
       route: '/payment-channels',
       hasSubmenu: true,
       submenu: [
-        { name: 'POS Terminals', route: '/payment-channels/pos' },
+        { name: 'POS Terminals', route: '/payment-channels/pos-terminals' },
         { name: 'E-Commerce', route: '/payment-channels/ecommerce' },
-        { name: 'QR Payments', route: '/payment-channels/qr' }
+        { name: 'QR Payments', route: '/payment-channels/qr-payments' }
+      ]
+    },
+    { 
+      name: 'Billing & Invoicing', 
+      icon: 'billing',
+      route: '/billing',
+      hasSubmenu: true,
+      submenu: [
+        { name: 'Invoices', route: '/billing/invoices' },
+        { name: 'Payment History', route: '/billing/payment-history' },
+        { name: 'Statements', route: '/billing/statements' },
+        { name: 'Recurring Billing', route: '/billing/recurring', isHighlight: true }
       ]
     },
     { 
@@ -64,7 +77,7 @@ export class SidebarComponent {
       hasSubmenu: true,
       submenu: [
         { name: 'Disputes', route: '/risk-compliance/disputes' },
-        { name: 'Fraud Detection', route: '/risk-compliance/fraud' },
+        { name: 'Fraud Detection', route: '/risk-compliance/fraud-detection' },
         { name: 'Compliance', route: '/risk-compliance/compliance' }
       ]
     },
@@ -73,14 +86,16 @@ export class SidebarComponent {
       icon: 'reports',
       route: '/reports',
       hasSubmenu: false
-    },
-    { 
-      name: 'Settings', 
-      icon: 'settings',
-      route: '/settings',
-      hasSubmenu: false
     }
   ];
+
+  // Settings at the bottom (separate from main menu)
+  settingsItem = { 
+    name: 'Settings', 
+    icon: 'settings',
+    route: '/settings',
+    hasSubmenu: false
+  };
 
   onToggleSidebar(): void {
     this.toggleSidebar.emit();
@@ -93,6 +108,8 @@ export class SidebarComponent {
       this.activeTransactionsSubmenu = !this.activeTransactionsSubmenu;
     } else if (menuName === 'Payment Channels') {
       this.activePaymentChannelsSubmenu = !this.activePaymentChannelsSubmenu;
+    } else if (menuName === 'Billing & Invoicing') {
+      this.activeBillingSubmenu = !this.activeBillingSubmenu;
     } else if (menuName === 'Risk & Compliance') {
       this.activeRiskComplianceSubmenu = !this.activeRiskComplianceSubmenu;
     }
@@ -102,6 +119,7 @@ export class SidebarComponent {
     if (menuName === 'Merchants') return this.activeMerchantsSubmenu;
     if (menuName === 'Transactions') return this.activeTransactionsSubmenu;
     if (menuName === 'Payment Channels') return this.activePaymentChannelsSubmenu;
+    if (menuName === 'Billing & Invoicing') return this.activeBillingSubmenu;
     if (menuName === 'Risk & Compliance') return this.activeRiskComplianceSubmenu;
     return false;
   }

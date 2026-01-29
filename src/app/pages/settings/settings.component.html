@@ -1,1 +1,403 @@
-<p>settings works!</p>
+<div class="settings-container">
+  <!-- Tab Navigation -->
+  <div class="tabs-nav">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'business-profile'"
+      (click)="setActiveTab('business-profile')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      Business Profile
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'user-management'"
+      (click)="setActiveTab('user-management')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      User Management
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'notifications'"
+      (click)="setActiveTab('notifications')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+      Notifications
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'security'"
+      (click)="setActiveTab('security')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      Security
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'api-keys'"
+      (click)="setActiveTab('api-keys')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+      </svg>
+      API Keys
+    </button>
+  </div>
+
+  <!-- Business Profile Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'business-profile'">
+    <div class="content-section">
+      <h2 class="section-title">Business Information</h2>
+      <p class="section-subtitle">Your registered business details. Contact support to make changes.</p>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label class="info-label">Business Name</label>
+          <div class="info-value">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            {{ businessName }}
+          </div>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Merchant ID</label>
+          <div class="info-value">{{ merchantId }}</div>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Business Type</label>
+          <div class="info-value">{{ businessType }}</div>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">MCC Code</label>
+          <div class="info-value">{{ mccCode }}</div>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Registration Date</label>
+          <div class="info-value">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            {{ registrationDate }}
+          </div>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Account Status</label>
+          <span class="status-badge status-active">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="8"></circle>
+            </svg>
+            Active
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Contact Information</h2>
+      <p class="section-subtitle">Update your business contact details.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Contact Person</label>
+          <input type="text" class="form-input" [(ngModel)]="contactPerson">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" [(ngModel)]="emailAddress">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" [(ngModel)]="phoneNumber">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mobile Number</label>
+          <input type="tel" class="form-input" [(ngModel)]="mobileNumber">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Business Address</label>
+          <input type="text" class="form-input" [(ngModel)]="businessAddress">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="save-btn" (click)="saveChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Management Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'user-management'">
+    <div class="content-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Team Members</h2>
+          <p class="section-subtitle">Manage users who have access to your merchant portal.</p>
+        </div>
+        <button class="add-user-btn" (click)="openAddUserModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add User
+        </button>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let member of teamMembers" class="table-row">
+            <td class="member-name">{{ member.name }}</td>
+            <td class="member-email">{{ member.email }}</td>
+            <td>
+              <span class="role-badge">{{ member.role }}</span>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(member.status)">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="8"></circle>
+                </svg>
+                {{ member.status }}
+              </span>
+            </td>
+            <td class="last-login">{{ member.lastLogin }}</td>
+            <td class="actions">
+              <button class="action-btn edit-btn" (click)="editMember(member)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button class="action-btn delete-btn" (click)="deleteMember(member)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Notifications Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'notifications'">
+    <div class="content-section">
+      <h2 class="section-title">Notification Preferences</h2>
+      <p class="section-subtitle">Choose how you want to receive notifications.</p>
+
+      <div class="notification-group">
+        <h3 class="group-title">Transaction Alerts</h3>
+        <div *ngFor="let setting of notificationSettings.slice(0, 3)" class="notification-item">
+          <div class="notification-info">
+            <div class="notification-title">{{ setting.title }}</div>
+            <div class="notification-description">{{ setting.description }}</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="setting.enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="notification-group">
+        <h3 class="group-title">Settlement Alerts</h3>
+        <div *ngFor="let setting of notificationSettings.slice(3, 5)" class="notification-item">
+          <div class="notification-info">
+            <div class="notification-title">{{ setting.title }}</div>
+            <div class="notification-description">{{ setting.description }}</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="setting.enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="notification-group">
+        <h3 class="group-title">Dispute Alerts</h3>
+        <div *ngFor="let setting of notificationSettings.slice(5)" class="notification-item">
+          <div class="notification-info">
+            <div class="notification-title">{{ setting.title }}</div>
+            <div class="notification-description">{{ setting.description }}</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="setting.enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="save-btn" (click)="saveNotificationPreferences()">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'security'">
+    <div class="content-section">
+      <h2 class="section-title">Change Password</h2>
+      <p class="section-subtitle">Update your account password regularly for security.</p>
+
+      <div class="form-group-vertical">
+        <label class="form-label">Current Password</label>
+        <input type="password" class="form-input" [(ngModel)]="currentPassword">
+      </div>
+
+      <div class="form-group-vertical">
+        <label class="form-label">New Password</label>
+        <input type="password" class="form-input" [(ngModel)]="newPassword">
+      </div>
+
+      <div class="form-group-vertical">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" class="form-input" [(ngModel)]="confirmPassword">
+      </div>
+
+      <button class="update-btn" (click)="updatePassword()">Update Password</button>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">Two-Factor Authentication</h2>
+      <p class="section-subtitle">Add an extra layer of security to your account.</p>
+
+      <div class="two-factor-item">
+        <div class="two-factor-info">
+          <div class="two-factor-title">Enable 2FA</div>
+          <div class="two-factor-description">Use an authenticator app for additional security</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" [(ngModel)]="enable2FA" (change)="toggle2FA()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Keys Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'api-keys'">
+    <div class="content-section">
+      <h2 class="section-title">API Credentials</h2>
+      <p class="section-subtitle">Manage API keys for integration with your systems.</p>
+
+      <div class="api-key-item">
+        <div class="api-key-info">
+          <label class="api-key-label">Merchant ID</label>
+          <div class="api-key-value">{{ merchantIdAPI }}</div>
+        </div>
+        <button class="copy-btn" (click)="copyToClipboard(merchantIdAPI)">Copy</button>
+      </div>
+
+      <div class="api-key-item">
+        <div class="api-key-info">
+          <label class="api-key-label">API Key (Production)</label>
+          <div class="api-key-value">{{ apiKeyProduction }}</div>
+        </div>
+        <button class="regenerate-btn" (click)="regenerateKey('production')">Regenerate</button>
+      </div>
+
+      <div class="api-key-item">
+        <div class="api-key-info">
+          <label class="api-key-label">API Key (Sandbox)</label>
+          <div class="api-key-value">{{ apiKeySandbox }}</div>
+        </div>
+        <button class="regenerate-btn" (click)="regenerateKey('sandbox')">Regenerate</button>
+      </div>
+
+      <div class="warning-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span><strong>Warning:</strong> Keep your API keys secure and never share them publicly. Regenerating a key will invalidate the previous one immediately.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Team Member Modal -->
+<div class="modal-overlay" *ngIf="showAddUserModal" (click)="closeAddUserModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Add Team Member</h2>
+        <p class="modal-subtitle">Invite a new user to access the merchant portal.</p>
+      </div>
+      <button class="close-btn" (click)="closeAddUserModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          placeholder="Enter full name"
+          [(ngModel)]="newTeamMember.fullName">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input 
+          type="email" 
+          class="form-input" 
+          placeholder="Enter email address"
+          [(ngModel)]="newTeamMember.email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-select" [(ngModel)]="newTeamMember.role">
+          <option value="">Select role</option>
+          <option value="Admin">Admin</option>
+          <option value="Cashier">Cashier</option>
+          <option value="Finance">Finance</option>
+          <option value="Viewer">Viewer</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeAddUserModal()">Cancel</button>
+      <button class="submit-btn" (click)="sendInvitation()">Send Invitation</button>
+    </div>
+  </div>
+</div>

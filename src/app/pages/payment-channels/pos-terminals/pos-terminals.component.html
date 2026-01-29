@@ -1,1 +1,227 @@
-<p>pos-terminals works!</p>
+<div class="pos-terminals-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">POS Terminals</h1>
+      <p class="page-subtitle">Manage your payment terminal devices</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon icon-terminals">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Terminals</div>
+        <div class="stat-value">{{ totalTerminals }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-online">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Online</div>
+        <div class="stat-value">{{ onlineTerminals }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-offline">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Offline</div>
+        <div class="stat-value">{{ offlineTerminals }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-volume">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Today's Volume</div>
+        <div class="stat-value">{{ formatVolume(todayVolume) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terminals Management Section -->
+  <div class="terminals-management-container">
+    <div class="terminals-header">
+      <div class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input 
+          type="text" 
+          placeholder="Search terminals..." 
+          [(ngModel)]="searchQuery"
+          class="search-input"
+        />
+      </div>
+      <button class="btn-request-terminal" (click)="openRequestModal()">
+        <span class="btn-icon">+</span>
+        Request New Terminal
+      </button>
+    </div>
+
+    <!-- Terminals Table -->
+    <div class="table-container">
+      <table class="terminals-table">
+        <thead>
+          <tr>
+            <th>Terminal ID</th>
+            <th>Model</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Last Transaction</th>
+            <th>Today's Volume</th>
+            <th>Signal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let terminal of filteredTerminals">
+            <td class="terminal-id-cell">{{ terminal.id }}</td>
+            <td>
+              <div class="model-info">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span>{{ terminal.model }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="location-info">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                {{ terminal.location }}
+              </div>
+            </td>
+            <td>
+              <span [class]="'status-badge ' + getStatusClass(terminal.status)">
+                <span class="status-dot"></span>
+                {{ terminal.status | titlecase }}
+              </span>
+            </td>
+            <td class="time-cell">{{ terminal.lastTransaction }}</td>
+            <td class="volume-info">
+              <div class="volume-amount">{{ formatVolume(terminal.todayVolume) }}</div>
+              <div class="volume-txns">{{ terminal.todayTxns }} txns</div>
+            </td>
+            <td>
+              <span [class]="'signal-badge ' + getSignalClass(terminal.signal)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+                {{ terminal.signal | titlecase }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-more">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <circle cx="12" cy="19" r="2"></circle>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Request New Terminal Modal -->
+<div class="modal-overlay" *ngIf="showRequestModal" (click)="closeRequestModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">Request New Terminal</h3>
+        <p class="modal-subtitle">Submit a request for an additional POS terminal.</p>
+      </div>
+      <button class="modal-close" (click)="closeRequestModal()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Terminal Type</label>
+        <select [(ngModel)]="selectedTerminalType" class="form-select">
+          <option value="" disabled>Select terminal type</option>
+          <option *ngFor="let type of terminalTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Installation Location</label>
+        <input 
+          type="text" 
+          [(ngModel)]="installationLocation"
+          placeholder="e.g., New checkout counter"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Reason for Request</label>
+        <textarea 
+          [(ngModel)]="requestReason"
+          placeholder="Describe why you need an additional terminal..."
+          class="form-textarea"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Urgency</label>
+        <select [(ngModel)]="selectedUrgency" class="form-select">
+          <option value="" disabled>Select urgency</option>
+          <option *ngFor="let level of urgencyLevels" [value]="level">{{ level }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeRequestModal()">Cancel</button>
+      <button 
+        class="btn-submit" 
+        (click)="submitRequest()"
+        [disabled]="!selectedTerminalType || !installationLocation || !requestReason || !selectedUrgency"
+      >
+        Submit Request
+      </button>
+    </div>
+  </div>
+</div>
