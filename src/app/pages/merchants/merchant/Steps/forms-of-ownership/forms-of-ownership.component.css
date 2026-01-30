@@ -1,0 +1,472 @@
+/* forms-of-ownership.component.css */
+
+/* Form Section */
+.form-section {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #F2F2F2;
+}
+
+.section-header i {
+  color: #C8102E;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.section-title {
+  color: #001E42;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Info Section */
+.info-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #F8F9FA;
+  border: 1px solid #E6E6E6;
+  border-radius: 12px;
+}
+
+.info-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #001E42;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.info-section-title i {
+  margin-right: 8px;
+  color: #C8102E;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  max-width: 900px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-group .ant-form-item-label {
+  padding-bottom: 8px !important;
+  text-align: left !important;
+}
+
+.form-group .ant-form-item-control {
+  width: 100%;
+  max-width: 280px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #001E42;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.form-label .required {
+  color: #C8102E;
+  margin-left: 4px;
+}
+
+/* Form Inputs - Compact Sizing */
+.form-input, .form-select, .compact-input {
+  width: 100% !important;
+  max-width: 280px;
+  padding: 12px 14px;
+  border: 2px solid #E6E6E6;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: all 0.3s ease;
+  background: white;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.form-input:focus, .form-select:focus, .compact-input:focus {
+  outline: none;
+  border-color: #C8102E;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+/* Form Label Alignment */
+::ng-deep .form-group .ant-form-item {
+  margin-bottom: 0 !important;
+  width: 100%;
+}
+
+::ng-deep .form-group .ant-form-item-label {
+  text-align: left !important;
+  padding-bottom: 8px !important;
+  width: 100% !important;
+  max-width: 280px !important;
+}
+
+::ng-deep .form-group .ant-form-item-label > label {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #001E42 !important;
+}
+
+::ng-deep .form-group .ant-form-item-control {
+  width: 100% !important;
+  max-width: 280px !important;
+}
+
+/* Compact Input Sizing */
+.full-width-input {
+  width: 100% !important;
+  max-width: 280px;
+}
+
+/* Ownership Section */
+.ownership-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #F8F9FA;
+  border: 1px solid #E6E6E6;
+  border-radius: 12px;
+}
+
+.ownership-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #001E42;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.ownership-section-title i {
+  margin-right: 8px;
+  color: #C8102E;
+}
+
+/* Ownership Table */
+.ownership-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.ownership-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 120px 80px;
+  background: #001E42;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0;
+}
+
+.owner-col {
+  padding: 16px 12px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.owner-col:last-child {
+  border-right: none;
+}
+
+.ownership-rows {
+  background: white;
+}
+
+.ownership-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 120px 80px;
+  border-bottom: 1px solid #E6E6E6;
+  transition: background-color 0.3s ease;
+}
+
+.ownership-row:hover {
+  background: #F8F9FA;
+}
+
+.ownership-row:last-child {
+  border-bottom: none;
+}
+
+.ownership-row .owner-col {
+  padding: 12px;
+  border-right: 1px solid #E6E6E6;
+  color: #001E42;
+  background: transparent;
+}
+
+.ownership-row .owner-col:last-child {
+  border-right: none;
+}
+
+/* Owner Inputs */
+.owner-input {
+  width: 100% !important;
+  padding: 8px 12px;
+  border: 1px solid #E6E6E6;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.owner-input:focus {
+  outline: none;
+  border-color: #C8102E;
+  box-shadow: 0 0 0 2px rgba(200, 16, 46, 0.1);
+}
+
+.percentage-input {
+  width: 100% !important;
+}
+
+.percentage-input .ant-input-number {
+  width: 100% !important;
+  border: 1px solid #E6E6E6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.percentage-input .ant-input-number:focus-within {
+  border-color: #C8102E;
+  box-shadow: 0 0 0 2px rgba(200, 16, 46, 0.1);
+}
+
+/* Action Button */
+.action-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #C8102E;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background: rgba(200, 16, 46, 0.1);
+  color: #A00E26;
+}
+
+.delete-btn i {
+  font-size: 16px;
+}
+
+/* Add Owner Button */
+.add-owner-btn {
+  background: linear-gradient(135deg, #C8102E, #A00E26);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-owner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(200, 16, 46, 0.3);
+}
+
+.add-owner-btn i {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* Error Messages */
+.error-message {
+  color: #C8102E;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ownership-header,
+  .ownership-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .owner-col {
+    border-right: none;
+    border-bottom: 1px solid #E6E6E6;
+    padding: 12px;
+  }
+  
+  .ownership-header .owner-col {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .ownership-row .owner-col:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Ant Design Overrides for Compact Sizing */
+::ng-deep .compact-input.ant-select .ant-select-selector {
+  padding: 12px 14px !important;
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-width: 280px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .compact-input.ant-select-focused .ant-select-selector {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+::ng-deep .compact-input.ant-input {
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  padding: 12px 14px !important;
+  height: 44px !important;
+  max-width: 280px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .compact-input.ant-input:focus {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+/* Number Input - Compact sizing */
+::ng-deep .compact-input.ant-input-number {
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  width: 100% !important;
+  max-width: 280px !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .compact-input.ant-input-number .ant-input-number-input {
+  padding: 12px 14px !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  line-height: 1 !important;
+}
+
+::ng-deep .compact-input.ant-input-number:focus-within {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+/* Original Ant Design Overrides for other elements */
+::ng-deep .ant-select-selector {
+  padding: 14px 16px !important;
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .ant-select-focused .ant-select-selector {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+::ng-deep .ant-input {
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  padding: 14px 16px !important;
+  height: 48px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .ant-input:focus {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+/* Number Input - Match exact sizing */
+::ng-deep .ant-input-number {
+  border: 2px solid #E6E6E6 !important;
+  border-radius: 8px !important;
+  width: 100% !important;
+  height: 48px !important;
+  box-sizing: border-box !important;
+}
+
+::ng-deep .ant-input-number .ant-input-number-input {
+  padding: 14px 16px !important;
+  font-size: 14px !important;
+  height: 44px !important;
+  line-height: 1 !important;
+}
+
+::ng-deep .ant-input-number:focus-within {
+  border-color: #C8102E !important;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1) !important;
+}
+
+::ng-deep .ant-btn-primary {
+  background: linear-gradient(135deg, #C8102E, #A00E26) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #A00E26, #8B0C22) !important;
+}
+
+::ng-deep .ant-btn-text {
+  border: none !important;
+  background: transparent !important;
+}

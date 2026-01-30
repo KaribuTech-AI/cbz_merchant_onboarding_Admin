@@ -1,0 +1,135 @@
+<!-- forms-of-ownership.component.html -->
+<div class="form-section">
+  <div class="section-header">
+    <i class="fas fa-building"></i>
+    <h2 class="section-title">Forms of Ownership</h2>
+  </div>
+
+  <form nz-form [formGroup]="ownershipForm">
+    <!-- Company Information Section -->
+    <div class="info-section">
+      <div class="info-section-title">
+        <i class="fas fa-info-circle"></i>
+        Company Information
+      </div>
+      <div class="form-grid three-column">
+        <nz-form-item class="form-group">
+          <nz-form-label nzRequired>Company Type</nz-form-label>
+          <nz-form-control [nzErrorTip]="companyTypeErrorTip">
+            <nz-select formControlName="companyType" nzPlaceHolder="Select company type">
+              <nz-option *ngFor="let type of companyTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+            </nz-select>
+            <ng-template #companyTypeErrorTip>
+              <span *ngIf="isControlInvalid(ownershipForm.get('companyType'))">
+                {{ getFieldErrorMessage(ownershipForm.get('companyType'), 'Company Type') }}
+              </span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-group">
+          <nz-form-label nzRequired>Company Registration Number</nz-form-label>
+          <nz-form-control [nzErrorTip]="registrationNumberErrorTip">
+            <input nz-input formControlName="registrationNumber" placeholder="Enter registration number" />
+            <ng-template #registrationNumberErrorTip>
+              <span *ngIf="isControlInvalid(ownershipForm.get('registrationNumber'))">
+                {{ getFieldErrorMessage(ownershipForm.get('registrationNumber'), 'Registration Number') }}
+              </span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+      <nz-form-item class="form-group">
+          <nz-form-label nzRequired>Number of Employees</nz-form-label>
+          <nz-form-control [nzErrorTip]="numberOfEmployeesErrorTip">
+            <nz-input-number formControlName="numberOfEmployees" [nzMin]="1" [nzStep]="1" class="full-width-input"></nz-input-number>
+            <ng-template #numberOfEmployeesErrorTip>
+              <span *ngIf="isControlInvalid(ownershipForm.get('numberOfEmployees'))">
+                {{ getFieldErrorMessage(ownershipForm.get('numberOfEmployees'), 'Number of Employees') }}
+              </span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- Ownership Section -->
+    <div class="ownership-section">
+      <div class="ownership-section-title">
+        <i class="fas fa-users"></i>
+        Company/Organization Ownership (10% and above)
+      </div>
+
+      <div class="ownership-table">
+        <div class="ownership-header">
+          <div class="owner-col first-name-col">First Name</div>
+          <div class="owner-col middle-name-col">Middle Name</div>
+          <div class="owner-col last-name-col">Last Name</div>
+          <div class="owner-col percentage-col">Percentage</div>
+          <div class="owner-col action-col">Action</div>
+        </div>
+
+        <div formArrayName="shareholders" class="ownership-rows">
+          <!-- This line correctly uses 'shareholdersArray' -->
+          <div class="ownership-row" *ngFor="let owner of shareholdersArray.controls; let i = index" [formGroupName]="i">
+            <nz-form-item class="owner-col first-name-col">
+              <nz-form-control [nzErrorTip]="firstNameErrorTip">
+                <input nz-input formControlName="firstname" placeholder="First Name" class="owner-input" />
+                <ng-template #firstNameErrorTip>
+                  <span *ngIf="isControlInvalid(shareholdersArray.at(i).get('firstname'))">
+                    {{ getFieldErrorMessage(shareholdersArray.at(i).get('firstname'), 'First Name') }}
+                  </span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="owner-col middle-name-col">
+              <nz-form-control>
+                <input nz-input formControlName="middlename" placeholder="Middle Name" class="owner-input" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="owner-col last-name-col">
+              <nz-form-control [nzErrorTip]="lastNameErrorTip">
+                <input nz-input formControlName="lastname" placeholder="Last Name" class="owner-input" />
+                <ng-template #lastNameErrorTip>
+                  <span *ngIf="isControlInvalid(shareholdersArray.at(i).get('lastname'))">
+                    {{ getFieldErrorMessage(shareholdersArray.at(i).get('lastname'), 'Last Name') }}
+                  </span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item class="owner-col percentage-col">
+              <nz-form-control [nzErrorTip]="percentageErrorTip">
+                <nz-input-number formControlName="percentage" [nzMin]="0" [nzMax]="100" [nzStep]="1" class="owner-input percentage-input"></nz-input-number>
+                <ng-template #percentageErrorTip>
+                  <span *ngIf="isControlInvalid(shareholdersArray.at(i).get('percentage'))">
+                    {{ getFieldErrorMessage(shareholdersArray.at(i).get('percentage'), 'Percentage') }}
+                  </span>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <div class="owner-col action-col">
+              <button nz-button nzType="text" nzDanger (click)="deleteShareholderRow(i)" class="delete-btn" nzSize="small">
+                <i nz-icon nzType="delete" nzTheme="outline"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="getShareholderPercentageError()" class="error-message">
+        {{ getShareholderPercentageError() }}
+      </div>
+
+      <button
+  nz-button
+  nzType="primary"
+  (click)="addShareholderRow()"
+  class="add-owner-btn"
+  [disabled]="isAddOwnerButtonDisabled()"
+>
+  <i nz-icon nzType="plus"></i>
+  Add Owner
+</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,138 @@
+<div class="registration-container">
+  <div class="stepper-sidebar">
+    <div class="stepper-header">
+      <div class="logo-section">
+        <div class="logo-container">
+          <img src="\assets\cbzlogo.png" alt="logo" style="height: 40px;" />
+          <span class="holdings-text">Holdings</span>
+          <span class="portal-text">Self Service Portal</span>
+        </div>
+      </div>
+      <div class="application-steps-title">APPLICATION STEPS</div>
+    </div>
+
+    <div class="stepper-steps">
+      <div *ngFor="let step of steps"
+           class="step-item"
+           [class.active]="isActive(step.id)"
+           [class.completed]="currentStep > step.id"
+           (click)="navigateTo(step.id)">
+        <div class="step-content-wrapper">
+          <span class="step-name">{{step.name}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <button 
+      type="button" 
+      class="exit-button" 
+      (click)="navigateToLandingPage()" 
+      title="Exit Application">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="content-header">
+      <h2 class="section-title">{{getCurrentStepTitle()}}</h2>
+    </div>
+
+    <div class="step-content">
+      @switch (currentStep) {
+        @case (0) {
+          <app-business-details
+            [businessData]="businessDetailsData?.businessDetails"
+            (formData)="updateBusinessDetails($event)">
+          </app-business-details>
+        }
+        
+        @case (1) {
+          <app-contact-details
+            (formData)="updateContactDetails($event)"
+            [initialData]="contactDetailsData?.contactDetails">
+          </app-contact-details>
+        }
+        
+        @case (2) {
+          <app-address-details
+            (formData)="updateAddressDetails($event)">
+          </app-address-details>
+        }
+        
+        @case (3) {
+          <app-forms-of-ownership
+            (formData)="updateOwnershipDetails($event)"
+            [ownershipData]="ownershipFormData?.ownershipDetails">
+          </app-forms-of-ownership>
+        }
+        
+        @case (4) {
+          <app-merchant-account
+            (dataChange)="updateMerchantAccount($event)">
+          </app-merchant-account>
+        }
+        
+        @case (5) {
+          <app-banking-preferences
+            (formData)="updateBankingReferences($event)">
+          </app-banking-preferences>
+        }
+        
+        @case (6) {
+          <app-directors
+            [businessData]="customerData"
+            (dataUpdated)="updateDirectors($event)">
+          </app-directors>
+        }
+        
+        @case (7) {
+          <app-documents
+            [businessData]="customerData"
+            (dataUpdated)="updateDocuments($event)">
+          </app-documents>
+        }
+        
+        @case (8) {
+          <app-preferances
+            (formData)="updatePreferences($event)">
+          </app-preferances>
+        }
+        
+        @case (9) {
+          <app-product-offer 
+            (formData)="updateProductOffer($event)">
+          </app-product-offer>
+        }
+        
+        @case (10) {
+          <app-captcha
+            (onValidation)="handleVerificationComplete($event)">
+          </app-captcha>
+        }
+      }
+    </div>
+
+    <div class="button-container">
+      <button class="btn btn-back"
+              (click)="goBack()"
+              [disabled]="currentStep === 0">
+        Back
+      </button>
+      <button class="btn btn-save"
+              (click)="saveProgress()">
+        Save
+      </button>
+      <button class="btn btn-next"
+              (click)="handleNextOrSubmit()"
+              [disabled]="isLoading">
+        <span *ngIf="isLoading">
+          <i nz-icon nzType="loading"></i>
+          Processing...
+        </span>
+        <span *ngIf="!isLoading">
+          {{ getButtonText() }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>

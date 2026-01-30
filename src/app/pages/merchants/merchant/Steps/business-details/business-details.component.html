@@ -1,0 +1,204 @@
+<div class="container">
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Business Details Form -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-building"></i>
+        <h2 class="section-title">Business Details</h2>
+      </div>
+
+      <form [formGroup]="businessForm" class="business-details-form" novalidate>
+        <!-- Basic Information Section -->
+        <div class="form-subsection">
+          <div class="subsection-title">
+            <i class="fas fa-info-circle"></i>
+            Basic Information
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Registered Name <span class="required">*</span></label>
+              <input
+                type="text"
+                class="form-input"
+                [class.error]="hasFieldError('registeredName')"
+                formControlName="registeredName"
+                placeholder="Company Registered Name"
+                (blur)="onFieldBlur('registeredName')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('registeredName')">
+                {{ getFieldError('registeredName') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Trading Name <span class="required">*</span></label>
+              <input
+                type="text"
+                class="form-input"
+                [class.error]="hasFieldError('tradingName')"
+                formControlName="tradingName"
+                placeholder="Trading Name"
+                (blur)="onFieldBlur('tradingName')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('tradingName')">
+                {{ getFieldError('tradingName') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">VAT Number <span class="required">*</span></label>
+              <input
+                type="text"
+                class="form-input"
+                [class.error]="hasFieldError('vatNumber')"
+                formControlName="vatNumber"
+                placeholder="VAT Number"
+                (blur)="onFieldBlur('vatNumber')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('vatNumber')">
+                {{ getFieldError('vatNumber') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Country of Incorporation <span class="required">*</span></label>
+              <select
+                class="form-select"
+                [class.error]="hasFieldError('countryOfIncorporation')"
+                formControlName="countryOfIncorporation"
+                (blur)="onFieldBlur('countryOfIncorporation')"
+              >
+                <option value="">Select Country</option>
+                <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+              </select>
+              <div class="error-message" *ngIf="hasFieldError('countryOfIncorporation')">
+                {{ getFieldError('countryOfIncorporation') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Certificate of Incorporation Number <span class="required">*</span></label>
+              <input
+                type="text"
+                class="form-input"
+                [class.error]="hasFieldError('certificateOfIncorporationNumber')"
+                formControlName="certificateOfIncorporationNumber"
+                placeholder="Certificate Incorporation Number"
+                (blur)="onFieldBlur('certificateOfIncorporationNumber')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('certificateOfIncorporationNumber')">
+                {{ getFieldError('certificateOfIncorporationNumber') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Registration Date <span class="required">*</span></label>
+              <input
+                type="date"
+                class="form-input"
+                [class.error]="hasFieldError('registrationDate')"
+                formControlName="registrationDate"
+                (blur)="onFieldBlur('registrationDate')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('registrationDate')">
+                {{ getFieldError('registrationDate') }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Form of Ownership <span class="required">*</span></label>
+              <input
+                type="text"
+                class="form-input"
+                [class.error]="hasFieldError('ownershipType')"
+                formControlName="ownershipType"
+                placeholder="Form of Ownership"
+                (blur)="onFieldBlur('ownershipType')"
+              />
+              <div class="error-message" *ngIf="hasFieldError('ownershipType')">
+                {{ getFieldError('ownershipType') }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Industry Information Section -->
+        <div class="form-subsection">
+          <div class="subsection-title">
+            <i class="fas fa-industry"></i>
+            Industry Information
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Industry <span class="required">*</span></label>
+              <select
+                class="form-select"
+                [class.error]="hasFieldError('industry')"
+                formControlName="industry"
+                (blur)="onFieldBlur('industry')"
+              >
+                <option value="">Select Industry</option>
+                <option
+                  *ngFor="let industry of Object.keys(industrySubCategories)"
+                  [value]="industry"
+                >
+                  {{ industry | titlecase }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="hasFieldError('industry')">
+                {{ getFieldError('industry') }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Industry Sub Category <span class="required">*</span></label>
+              <select
+                class="form-select"
+                [class.error]="hasFieldError('industrySubCategory')"
+                formControlName="industrySubCategory"
+                (blur)="onFieldBlur('industrySubCategory')"
+              >
+                <option value="">Select Category</option>
+                <option
+                  *ngFor="let subCategory of getSubCategories()"
+                  [value]="subCategory.value"
+                >
+                  {{ subCategory.label }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="hasFieldError('industrySubCategory')">
+                {{ getFieldError('industrySubCategory') }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Company Description Section -->
+        <div class="form-subsection">
+          <div class="subsection-title">
+            <i class="fas fa-file-text"></i>
+            Company Description
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Company Description <span class="required">*</span></label>
+              <textarea
+                class="form-textarea"
+                [class.error]="hasFieldError('companyDescription')"
+                formControlName="companyDescription"
+                placeholder="Company Description"
+                rows="4"
+                (blur)="onFieldBlur('companyDescription')"
+              ></textarea>
+              <div class="error-message" *ngIf="hasFieldError('companyDescription')">
+                {{ getFieldError('companyDescription') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

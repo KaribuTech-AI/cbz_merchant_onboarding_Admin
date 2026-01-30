@@ -1,0 +1,397 @@
+
+        /* Container and Layout - Full width card */
+        .merchant-form-container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 0;
+            background-color: #F2F2F2;
+            margin: 0;
+        }
+
+        .merchant-card {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #FFFFFF;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .merchant-form {
+            width: 100%;
+        }
+
+        /* Form Sections with light blue background */
+        .form-section {
+            margin-bottom: 40px;
+            padding: 24px;
+            background: #F8F9FA;
+            border: 1px solid #E6E6E6;
+            border-radius: 12px;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* Section titles with icons */
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #001E42;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #F2F2F2;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title .icon {
+            font-size: 16px;
+            color: white;
+            background-color: #C8102E;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        /* Form field icons */
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #001E42;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-icon {
+            font-size: 16px;
+            color: #C8102E;
+            margin-right: 8px;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: #C8102E;
+            margin-left: 4px;
+        }
+
+        .form-hint {
+            display: block;
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Two-column Grid Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .form-group {
+            width: 100%;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Form Elements */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E6E6E6;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2D3748;
+            background-color: #FFFFFF;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #C8102E;
+            box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #A0AEC0;
+            font-style: italic;
+        }
+
+        .form-input.invalid,
+        .form-select.invalid,
+        .form-textarea.invalid {
+            border-color: #C8102E;
+            background-color: #FEF2F2;
+            box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* File Upload */
+        .file-upload-container {
+            position: relative;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border: 3px dashed #CBD5E0;
+            border-radius: 12px;
+            background-color: #F7FAFC;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            border-color: #C8102E;
+            background-color: #FEF2F2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(200, 16, 46, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 20px;
+            color: #C8102E;
+            margin-right: 16px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: #4A5568;
+            font-weight: 500;
+        }
+
+        /* Checkboxes */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #2D3748;
+            user-select: none;
+            font-weight: 500;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .checkbox-label:hover {
+            background-color: #F7FAFC;
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #CBD5E0;
+            border-radius: 6px;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-input:checked + .checkbox-custom {
+            background-color: #C8102E;
+            border-color: #C8102E;
+            transform: scale(1.1);
+        }
+
+        .checkbox-input:checked + .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Tables and Lists */
+        .card-types-list,
+        .pricing-list,
+        .transaction-list {
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background-color: white;
+        }
+
+        .card-type-header,
+        .pricing-header,
+        .transaction-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            padding: 16px 20px;
+            background-color: #F8F9FA;
+            color: #001E42;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .card-type-row,
+        .pricing-row,
+        .transaction-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .card-type-row:hover,
+        .pricing-row:hover,
+        .transaction-row:hover {
+            background-color: #F0FDF4;
+        }
+
+        .card-type-row:last-child,
+        .pricing-row:last-child,
+        .transaction-row:last-child {
+            border-bottom: none;
+        }
+
+        .card-name,
+        .parameter-name,
+        .transaction-name {
+            color: #2D3748;
+            font-weight: 500;
+        }
+
+        .parameter-value {
+            color: #4A5568;
+            font-weight: 600;
+        }
+
+        .card-status.accepted,
+        .approval-status.required {
+            color: #38A169;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .card-status:not(.accepted),
+        .approval-status:not(.required) {
+            color: #38A169;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Error Messages */
+        .error-message {
+            font-size: 12px;
+            color: #C8102E;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .error-message::before {
+            content: '⚠️';
+            font-size: 14px;
+        }
+
+        /* Animation for form sections */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-section {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .merchant-card {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-group.full-width {
+                grid-column: 1;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+        }
+   

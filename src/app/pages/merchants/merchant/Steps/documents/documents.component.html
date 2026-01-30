@@ -1,0 +1,110 @@
+<div class="documents-section">
+  <div class="section-header">
+    <i class="fas fa-file-alt"></i>
+    <h2 class="section-title">Documents</h2>
+  </div>
+  
+  <p class="documents-intro">Please upload the required business documents or select "Upload Later" option.</p>
+  
+  <div class="documents-table-container">
+    <div class="documents-table-wrapper">
+      <table class="documents-table">
+        <thead>
+          <tr>
+            <th>Document Category</th>
+            <th>Document Name</th>
+            <th>Document Type</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of documentCategories; let i = index" class="document-row">
+            <td class="category-cell">
+              <div class="category-info">
+                <i class="fas fa-folder"></i>
+                <span>{{ category }}</span>
+              </div>
+            </td>
+            
+            <td class="name-cell">
+              <nz-select 
+                [(ngModel)]="documentSelections[i].documentName" 
+                [ngModelOptions]="{standalone: true}" 
+                nzPlaceHolder="--Select--" 
+                class="document-select">
+                <nz-option 
+                  *ngFor="let docName of getDocumentNamesByCategory(category)" 
+                  [nzValue]="docName" 
+                  [nzLabel]="docName">
+                </nz-option>
+              </nz-select>
+            </td>
+            
+            <td class="type-cell">
+              <nz-select 
+                [(ngModel)]="documentSelections[i].documentType" 
+                [ngModelOptions]="{standalone: true}" 
+                nzPlaceHolder="Select Type" 
+                class="document-select">
+                <nz-option 
+                  *ngFor="let type of documentTypes" 
+                  [nzValue]="type" 
+                  [nzLabel]="type">
+                </nz-option>
+              </nz-select>
+            </td>
+            
+            <td class="action-cell">
+              <div class="document-actions">
+                <div class="file-upload-container">
+                  <input 
+                    type="file" 
+                    #fileInput 
+                    [id]="'file-' + i" 
+                    class="file-input" 
+                    (change)="handleFileChange($event, category)" 
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+                  
+                  <label [for]="'file-' + i" class="choose-file-btn">
+                    <i class="fas fa-upload"></i>
+                    Choose File
+                  </label>
+                  
+                  <button 
+                    type="button" 
+                    class="upload-later-btn"
+                    (click)="uploadLater(category, i)">
+                    <i class="fas fa-clock"></i>
+                    Upload Later
+                  </button>
+                </div>
+                
+                <div class="file-status" *ngIf="documentSelections[i].fileName">
+                  <div class="file-info">
+                    <i class="fas fa-file" [class.fa-check-circle]="documentSelections[i].uploadStatus === 'success'"></i>
+                    <span class="file-name">{{ documentSelections[i].fileName }}</span>
+                  </div>
+                  
+                  <div class="upload-status" [ngClass]="'status-' + documentSelections[i].uploadStatus">
+                    <span *ngIf="documentSelections[i].uploadStatus === 'uploading'">
+                      <i class="fas fa-spinner fa-spin"></i> Uploading...
+                    </span>
+                    <span *ngIf="documentSelections[i].uploadStatus === 'success'">
+                      <i class="fas fa-check"></i> Uploaded
+                    </span>
+                    <span *ngIf="documentSelections[i].uploadStatus === 'error'">
+                      <i class="fas fa-exclamation-triangle"></i> Failed
+                    </span>
+                    <span *ngIf="documentSelections[i].uploadStatus === 'pending'">
+                      <i class="fas fa-clock"></i> Pending
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

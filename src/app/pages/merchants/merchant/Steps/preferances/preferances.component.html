@@ -1,0 +1,118 @@
+<!-- Preferences Form Section -->
+<div class="form-section">
+  <div class="section-header">
+    <i class="fas fa-cog"></i>
+    <h2 class="section-title">Preferences</h2>
+  </div>
+
+  <form [formGroup]="preferencesForm">
+    <!-- Communication Preferences Section -->
+    <div class="preferences-section">
+      <div class="preferences-section-title">
+        <i class="fas fa-comments"></i>
+        Communication Preferences
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Preferred Method Of Communication <span class="required">*</span></label>
+          <nz-select 
+            formControlName="preferredCommunicationMethod" 
+            nzPlaceHolder="Select Communication Method" 
+            nzShowSearch
+            class="form-select">
+            <nz-option *ngFor="let method of communicationMethods"
+                      [nzValue]="method.value"
+                      [nzLabel]="method.label">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preferred Method For Reminder Communication <span class="required">*</span></label>
+          <nz-select 
+            formControlName="preferredReminderMethod" 
+            nzPlaceHolder="Select Communication Method" 
+            nzShowSearch
+            class="form-select">
+            <nz-option *ngFor="let method of communicationMethods"
+                      [nzValue]="method.value"
+                      [nzLabel]="method.label">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Additional Email Address</label>
+          <input 
+            nz-input 
+            formControlName="additionalEmail" 
+            placeholder="Enter additional email address" 
+            type="email" 
+            class="form-input" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Additional Phone Number</label>
+          <nz-input-group class="mobile-input-group" [nzAddOnBefore]="prefixTemplate">
+            <input 
+              nz-input 
+              formControlName="additionalPhone" 
+              placeholder="Enter phone number" 
+              type="tel" 
+              class="form-input" />
+          </nz-input-group>
+          <ng-template #prefixTemplate>
+            <nz-select 
+              formControlName="additionalPhonePrefix" 
+              nzPlaceHolder="Code"
+              class="prefix-select">
+              <nz-option *ngFor="let country of countryCodes"
+                        [nzValue]="country.dial_code"
+                        [nzLabel]="country.dial_code + ' ' + country.name">
+              </nz-option>
+            </nz-select>
+          </ng-template>
+        </div>
+      </div>
+      <!-- Add this after the communication preferences section -->
+<div class="personal-section">
+  <!-- <div class="preferences-section-title">
+    <i class="fas fa-user"></i>
+    Personal Preferences
+  </div> -->
+  <div class="form-grid">
+    <!-- Languages and Hobbies in one row -->
+    <div class="form-row">
+      <!-- <div class="form-group">
+        <label class="form-label">Languages <span class="required">*</span></label>
+        <nz-select
+          formControlName="languages"
+          nzPlaceHolder="Select Languages"
+          nzMode="multiple"
+          class="form-select">
+          <nz-option *ngFor="let lang of languagesList"
+                    [nzValue]="lang.value"
+                    [nzLabel]="lang.label">
+          </nz-option>
+        </nz-select>
+      </div> -->
+
+      <!-- <div class="form-group">
+        <label class="form-label">Hobbies <span class="required">*</span></label>
+        <nz-select
+          formControlName="hobbies"
+          nzPlaceHolder="Select Hobbies"
+          nzMode="multiple"
+          class="form-select">
+          <nz-option *ngFor="let hobby of hobbiesList"
+                    [nzValue]="hobby.value"
+                    [nzLabel]="hobby.label">
+          </nz-option>
+        </nz-select>
+      </div> -->
+    </div>
+  </div>
+</div>
+    </div>
+  </form>
+</div>

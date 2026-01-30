@@ -1,0 +1,482 @@
+<div class="container">
+    <div class="main-content">
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-users"></i>
+                <h2 class="section-title">Directors</h2>
+            </div>
+
+            <div class="directors-header">
+                <button class="next-btn add-directors-btn" (click)="showDirectorDrawer()">
+                    <i class="fas fa-plus"></i> Add Directors
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>ID Number</th>
+                            <th>Date Of Birth</th>
+                            <th>Gender</th>
+                            <th>Employment Year</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let director of directorsList; let i = index; trackBy: trackByDirectorId">
+                            <td>{{ director.personalDetails.firstName }}</td>
+                            <td>{{ director.personalDetails.lastName }}</td>
+                            <td>{{ director.personalDetails.idNumber }}</td>
+                            <td>{{ director.personalDetails.dateOfBirth | date }}</td>
+                            <td>{{ director.personalDetails.gender }}</td>
+                            <td>{{ director.employmentDetails.employmentYear }}</td>
+                            <td>
+                                <button class="action-btn edit-btn" (click)="editDirector(director, i)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="action-btn remove-btn" (click)="removeDirector(director)">
+                                    <i class="fas fa-trash-alt"></i> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="directorsList.length === 0">
+                            <td colspan="7" class="no-data">No directors added yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="drawer-overlay" [class.visible]="isDirectorDrawerVisible">
+    <div class="drawer">
+        <div class="drawer-header">
+            <h3 class="drawer-title">Add Director Details</h3>
+            <button class="close-drawer-btn" (click)="closeDirectorDrawer()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="drawer-body">
+            <div class="steps-container">
+                <div class="step-item" *ngFor="let step of directorSteps; let i = index"
+                    [class.active]="directorCurrentStep === i" [class.completed]="directorCurrentStep > i"
+                    (click)="onDirectorStepChange(i)">
+                    <div class="step-icon">
+                        <i class="fas fa-{{ getStepIcon(step) }}"></i>
+                    </div>
+                    <div class="step-title">{{ step }}</div>
+                </div>
+            </div>
+
+            <div class="form-subsection step-form-container">
+                <div *ngIf="directorCurrentStep === 0">
+                    <div class="subsection-title">
+                        <i class="fas fa-info-circle"></i> Personal Details
+                    </div>
+                    <form [formGroup]="directorForm" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Title <span class="required">*</span></label>
+                            <select class="form-select" formControlName="title">
+                                <option value="">Select Title</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Prof">Prof</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">First Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" formControlName="firstName"
+                                placeholder="First Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Middle Name</label>
+                            <input type="text" class="form-input" formControlName="middleName"
+                                placeholder="Middle Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" formControlName="lastName"
+                                placeholder="Last Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Identification Type <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" formControlName="identificationType" value="NATIONAL ID" />
+                                    National Id</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                National ID Number <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" formControlName="idNumber"
+                                placeholder="47-216439-Q-47 or 47-216439-q-47" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth <span class="required">*</span></label>
+                            <input type="date" class="form-input" formControlName="dateOfBirth" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" formControlName="gender" value="MALE" /> Male</label>
+                                <label><input type="radio" formControlName="gender" value="FEMALE" /> Female</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Citizenship</label>
+                            <select class="form-select" formControlName="citizenship">
+                                <option value="ZIMBABWE">ZIMBABWE</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nationality</label>
+                            <select class="form-select" formControlName="nationality">
+                                <option value="ZIMBABWEAN">ZIMBABWEAN</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Birth District</label>
+                            <input type="text" class="form-input" formControlName="birthDistrict"
+                                placeholder="Birth District" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Are You a USA Citizen</label>
+                            <div class="radio-group">
+                                <label><input type="radio" formControlName="usaCitizen" value="YES" /> Yes</label>
+                                <label><input type="radio" formControlName="usaCitizen" value="NO" /> No</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Do You Hold a USA Permanent Resident Green Card</label>
+                            <div class="radio-group">
+                                <label><input type="radio" formControlName="usaGreenCardHolder" value="YES" />
+                                    Yes</label>
+                                <label><input type="radio" formControlName="usaGreenCardHolder" value="NO" /> No</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Marital Status</label>
+                            <select class="form-select" formControlName="maritalStatus">
+                                <option value="">Select Status</option>
+                                <option value="SINGLE">Single</option>
+                                <option value="MARRIED">Married</option>
+                                <option value="DIVORCED">Divorced</option>
+                                <option value="WIDOWED">Widowed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Religion</label>
+                            <select class="form-select" formControlName="religion">
+                                <option value="">Select Religion</option>
+                                <option value="CHRISTIAN">Christian</option>
+                                <option value="MUSLIM">Muslim</option>
+                                <option value="HINDU">Hindu</option>
+                                <option value="BUDDHIST">Buddhist</option>
+                                <option value="OTHER">Other</option>
+                                <option value="NONE">None</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Race</label>
+                            <select class="form-select" formControlName="race">
+                                <option value="">Select Race</option>
+                                <option value="AFRICAN">African</option>
+                                <option value="ASIAN">Asian</option>
+                                <option value="EUROPEAN">European</option>
+                                <option value="MIXED">Mixed</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                  <div class="form-group phone-input-group">
+  <label class="form-label">Phone Number</label>
+  <div class="phone-input-container">
+    <select class="form-select country-code-select" formControlName="countryCode">
+      <option *ngFor="let country of getCountries()" [value]="countryCodes[country]">
+        {{ countryCodes[country] }}
+      </option>
+    </select>
+    <input 
+      type="tel" 
+      class="form-input phone-number-input" 
+      formControlName="phoneNumber" 
+      placeholder="Enter phone number"
+      pattern="[0-9\s\-\(\)]+"
+    />
+  </div>
+</div>
+                       
+                        <div class="form-group">
+                            <label class="form-label">Highest Level Of Education</label>
+                            <select class="form-select" formControlName="educationLevel">
+                                <option value="">Select Level</option>
+                                <option value="PRIMARY">Primary</option>
+                                <option value="SECONDARY">Secondary</option>
+                                <option value="DIPLOMA">Diploma</option>
+                                <option value="DEGREE">Degree</option>
+                                <option value="MASTERS">Masters</option>
+                                <option value="PHD">PhD</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Number of Dependants</label>
+                            <input type="number" class="form-input" formControlName="dependants" min="0" max="20"
+                                step="1" />
+                        </div>
+                    </form>
+                </div>
+
+                <div *ngIf="directorCurrentStep === 1">
+                    <div class="subsection-title">
+                        <i class="fas fa-home"></i> Address Details
+                    </div>
+                    <form [formGroup]="directorForm" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Address Type <span class="required">*</span></label>
+                            <select class="form-select" formControlName="addressType">
+                                <option value="">Select Address Type</option>
+                                <option value="RESIDENTIAL">Residential</option>
+                                <option value="BUSINESS">Business</option>
+                                <option value="POSTAL">Postal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address Line 1 <span class="required">*</span></label>
+                            <input type="text" class="form-input" formControlName="addressLine1"
+                                placeholder="Address Line 1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" class="form-input" formControlName="addressLine2"
+                                placeholder="Address Line 2" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Street Number</label>
+                            <input type="text" class="form-input" formControlName="streetNumber"
+                                placeholder="Street Number" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Street Name</label>
+                            <input type="text" class="form-input" formControlName="streetName"
+                                placeholder="Street Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Suburb</label>
+                            <input type="text" class="form-input" formControlName="suburb" placeholder="Suburb" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City <span class="required">*</span></label>
+                            <select class="form-select" formControlName="city">
+                                <option value="">Select City</option>
+                                <option value="HARARE">Harare</option>
+                                <option value="BULAWAYO">Bulawayo</option>
+                                <option value="MUTARE">Mutare</option>
+                                <option value="GWERU">Gweru</option>
+                                <option value="MASVINGO">Masvingo</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country <span class="required">*</span></label>
+                            <select class="form-select" formControlName="country">
+                                <option value="ZIMBABWE">Zimbabwe</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" class="form-input" formControlName="postalCode"
+                                placeholder="Postal Code" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Period of Residence (Years)</label>
+                            <input type="number" class="form-input" formControlName="residenceYears" min="0" max="100"
+                                step="1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Period of Residence (Months)</label>
+                            <input type="number" class="form-input" formControlName="residenceMonths" min="0" max="11"
+                                step="1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ownership Type</label>
+                            <select class="form-select" formControlName="ownershipType">
+                                <option value="">Select Ownership Type</option>
+                                <option value="OWNED">Owned</option>
+                                <option value="RENTED">Rented</option>
+                                <option value="COMPANY_PROVIDED">Company Provided</option>
+                                <option value="PARENTS">Parents</option>
+                                <option value="RELATIVES">Relatives</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Is Your Residential Address The Same As Your Postal
+                                Address</label>
+                            <div class="radio-group">
+                                <label><input type="radio" formControlName="isSamePostalAddress" value="YES" />
+                                    Yes</label>
+                                <label><input type="radio" formControlName="isSamePostalAddress" value="NO" /> No</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div *ngIf="directorCurrentStep === 2">
+                    <div class="subsection-title">
+                        <i class="fas fa-briefcase"></i> Employment Details
+                    </div>
+                    <form [formGroup]="directorForm" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Employer Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" formControlName="employerName"
+                                placeholder="Employer Name" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job Title <span class="required">*</span></label>
+                            <select class="form-select" formControlName="jobTitle">
+                                <option value="">Select Job Title</option>
+                                <option *ngFor="let title of jobTitles" [value]="title">{{ title }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employment Status</label>
+                            <input type="text" class="form-input" formControlName="employmentStatus"
+                                placeholder="Employment Status" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employer Contact</label>
+                            <input type="text" class="form-input" formControlName="employerContact"
+                                placeholder="Employer Contact" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employment Year <span class="required">*</span></label>
+                            <input type="number" class="form-input" formControlName="employmentYear"
+                                placeholder="Employment Year" />
+                        </div>
+                    </form>
+                </div>
+
+                <div *ngIf="directorCurrentStep === 3">
+                    <div class="subsection-title">
+                        <i class="fas fa-file-alt"></i> Documents
+                    </div>
+                    <p class="documents-intro">Please upload the required business documents or select "Upload Later"
+                        option.</p>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Document Category</th>
+                                    <th>Document Name</th>
+                                    <th>Document Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let docSelection of documentSelections; let i = index">
+                                    <td>{{ docSelection.category }}</td>
+                                    <td>
+                                        <select class="form-select" [(ngModel)]="docSelection.documentName"
+                                            [ngModelOptions]="{standalone: true}">
+                                            <option value="">Select Document Name</option>
+                                            <option *ngFor="let name of getDocumentNamesByCategory(docSelection.category)"
+                                                [value]="name">{{ name }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" [(ngModel)]="docSelection.documentType"
+                                            [ngModelOptions]="{standalone: true}">
+                                            <option value="">Select Type</option>
+                                            <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="document-actions">
+                                            <div class="file-upload-container">
+                                                <input type="file" [id]="'file-' + i" class="file-input"
+                                                    (change)="handleFileChange($event, i)"
+                                                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+                                                <label [for]="'file-' + i" class="next-btn choose-file-btn">
+                                                    <i class="fas fa-upload"></i> Choose File
+                                                </label>
+                                                <span class="file-name">{{ docSelection.fileName || 'No file chosen'
+                                                    }}</span>
+                                            </div>
+                                            <button class="action-btn upload-later-btn"
+                                                (click)="uploadLater(docSelection.category, i)">
+                                                Upload Later
+                                            </button>
+                                            <button class="action-btn preview-btn"
+                                                *ngIf="docSelection.file || docSelection.sharepointUrl"
+                                                (click)="previewDocument(i)">
+                                                <i class="fas fa-eye"></i> Preview
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="directorCurrentStep === 4">
+                    <div class="subsection-title">
+                        <i class="fas fa-cogs"></i> Preferences
+                    </div>
+                    <form [formGroup]="preferencesForm" class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Preferred Method Of Communication</label>
+                            <select class="form-select" formControlName="preferredCommunicationMethod">
+                                <option value="">Select Communication Method</option>
+                                <option *ngFor="let method of communicationMethods" [value]="method.value">{{
+                                    method.label }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Additional Email Address</label>
+                            <input type="email" class="form-input" formControlName="additionalEmail"
+                                placeholder="Email Address" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preferred Method For Reminder Communication</label>
+                            <select class="form-select" formControlName="preferredReminderMethod">
+                                <option value="">Select Communication Method</option>
+                                <option *ngFor="let method of communicationMethods" [value]="method.value">{{
+                                    method.label }}</option>
+                            </select>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="drawer-footer form-actions">
+            <button class="back-btn" *ngIf="directorCurrentStep > 0" (click)="prevDirectorStep()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="back-btn" (click)="closeDirectorDrawer()">Cancel</button>
+
+            <button class="next-btn" *ngIf="directorCurrentStep < directorSteps.length - 1"
+                (click)="nextDirectorStep()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <button class="next-btn" *ngIf="directorCurrentStep === directorSteps.length - 1"
+                (click)="submitDirector()">
+                Submit <i class="fas fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>

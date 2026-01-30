@@ -1,0 +1,157 @@
+<form [formGroup]="addressForm" class="address-form">
+  <div class="form-section">
+    <div class="section-header">
+      <i class="fas fa-home"></i>
+      <h2 class="section-title">Address Information</h2>
+    </div>
+
+    <!-- Address Section -->
+    <div class="address-section">
+      <div class="address-section-title">
+        <i class="fas fa-map-marker-alt"></i>
+        Residential Address
+      </div>
+      
+      <div class="form-grid">
+        <!-- Left Column -->
+        <div class="form-group">
+          <label class="form-label">Address Type <span class="required">*</span></label>
+          <select class="form-select" formControlName="addressType">
+            <option value="">Select Address Type</option>
+            <option value="RESIDENTIAL">Residential</option>
+            <option value="BUSINESS">Business</option>
+            <option value="POSTAL">Postal</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address Line 1 <span class="required">*</span></label>
+          <input type="text" class="form-input" formControlName="addressLine1" placeholder="Enter address line 1">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address Line 2</label>
+          <input type="text" class="form-input" formControlName="addressLine2" placeholder="Enter address line 2">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Street Number <span class="required">*</span></label>
+          <input type="text" class="form-input" formControlName="streetNumber" placeholder="Enter street number">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Street Name <span class="required">*</span></label>
+          <input type="text" class="form-input" formControlName="streetName" placeholder="Enter street name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Suburb <span class="required">*</span></label>
+          <input type="text" class="form-input" formControlName="suburb" placeholder="Enter suburb">
+        </div>
+
+                <div class="form-group">
+  <label class="form-label">Country <span class="required">*</span></label>
+  <select class="form-select" formControlName="country" (change)="onCountryChange($event)">
+    <option value="">Select Country</option>
+    <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+  </select>
+</div>
+
+        <div class="form-group">
+  <label class="form-label">City <span class="required">*</span></label>
+  <select class="form-select" formControlName="city" [disabled]="!selectedCountryCities.length">
+    <option value="">Select City</option>
+    <option *ngFor="let city of selectedCountryCities" [value]="city">{{city}}</option>
+  </select>
+</div>
+
+
+        <div class="form-group">
+          <label class="form-label">Postal Code <span class="required">*</span></label>
+          <input type="text" class="form-input" formControlName="postalCode" placeholder="Enter postal code">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ownership Type <span class="required">*</span></label>
+          <select class="form-select" formControlName="ownershipType">
+            <option value="">Select Ownership Type</option>
+            <option value="owned">Owned</option>
+            <option value="rented">Rented</option>
+            <option value="leased">Leased</option>
+            <option value="mortgaged">Mortgaged</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Residence Period Section -->
+    <div class="residence-period-section">
+      <div class="address-section-title">
+        <i class="fas fa-clock"></i>
+        Period of Residence
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Years <span class="required">*</span></label>
+          <div class="number-input">
+            <button type="button" class="number-btn" (click)="changeNumber('residenceYears', -1)">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" class="number-input-field" formControlName="residenceYears" min="0" readonly>
+            <button type="button" class="number-btn" (click)="changeNumber('residenceYears', 1)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Months <span class="required">*</span></label>
+          <div class="number-input">
+            <button type="button" class="number-btn" (click)="changeNumber('residenceMonths', -1)">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" class="number-input-field" formControlName="residenceMonths" min="0" max="11" readonly>
+            <button type="button" class="number-btn" (click)="changeNumber('residenceMonths', 1)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Toggle Section -->
+   <div class="postal-same-section">
+  <div class="form-row"> <!-- New wrapper div for the row -->
+    <div class="form-group toggle-group"> <!-- Added toggle-group class -->
+      <label class="form-label">Is Your Residential Address The Same As Your Postal Address? <span class="required">*</span></label>
+      <div class="yes-no-toggle">
+        <button type="button" 
+                class="toggle-option" 
+                [class.active]="addressForm.get('isSameAsPostalAddress')?.value === true"
+                (click)="toggleSameAsPostal(true)">
+          Yes 
+        </button>
+        <button type="button" 
+                class="toggle-option" 
+                [class.active]="addressForm.get('isSameAsPostalAddress')?.value === false"
+                (click)="toggleSameAsPostal(false)">
+          No
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group home-ownership-group"> <!-- Added home-ownership-group class -->
+      <label class="form-label">Home Ownership <span class="required">*</span></label>
+      <select class="form-select" formControlName="homeOwnership">
+        <option value="">Select Home Ownership</option>
+        <option value="Owned">Owned</option>
+        <option value="Rented">Rented</option>
+        <option value="Family Owned">Family Owned</option>
+        <option value="Company Owned">Company Owned</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+</div>
+  </div>
+</form>

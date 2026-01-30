@@ -1,0 +1,353 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F2F2F2;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Main Content - Modified to take full width */
+        .main-content {
+            width: 100%;
+            padding: 0;
+        }
+
+        /* Form Section - Modified to take full height */
+        .form-section {
+            background: white;
+            min-height: 100vh;
+            padding: 32px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #F2F2F2;
+        }
+
+        .section-header i {
+            color: #C8102E;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .section-title {
+            color: #001E42;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Form Subsections */
+        .form-subsection {
+            margin-bottom: 40px;
+            padding: 24px;
+            background: #F8F9FA;
+            border: 1px solid #E6E6E6;
+            border-radius: 12px;
+        }
+
+        .subsection-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #001E42;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .subsection-title i {
+            margin-right: 8px;
+            color: #C8102E;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #001E42;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-label .required {
+            color: #C8102E;
+            margin-left: 4px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 14px 16px;
+            border: 2px solid #E6E6E6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #C8102E;
+            box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Mobile Input Group */
+        .mobile-input-group {
+            display: flex;
+            border: 2px solid #E6E6E6;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-input-group:focus-within {
+            border-color: #C8102E;
+            box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+        }
+
+        .mobile-prefix {
+            flex: 0 0 180px;
+            border: none;
+            border-right: 2px solid #E6E6E6;
+            border-radius: 0;
+            font-size: 12px;
+            background: #F8F9FA;
+        }
+
+        .mobile-input {
+            flex: 1;
+            border: none;
+            border-radius: 0;
+        }
+
+        .mobile-prefix:focus, .mobile-input:focus {
+            box-shadow: none;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #E6E6E6;
+        }
+
+        .back-btn {
+            background: #6B7280;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover {
+            background: #4B5563;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #C8102E, #A00E26);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.3);
+        }
+
+        .next-btn i {
+            margin-left: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-subsection {
+                padding: 16px;
+            }
+            
+            .mobile-input-group {
+                flex-direction: column;
+            }
+            
+            .mobile-prefix {
+                flex: none;
+                border-right: none;
+                border-bottom: 2px solid #E6E6E6;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .back-btn, .next-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animation for form elements */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-subsection {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Validation styles */
+        .form-input.error, .form-select.error, .form-textarea.error {
+            border-color: #C8102E;
+            background-color: #FEF2F2;
+        }
+
+        .form-input.valid, .form-select.valid, .form-textarea.valid {
+            border-color: #10B981;
+            background-color: #F0FDF4;
+        }
+
+        /* Loading state */
+        .form-input:disabled, .form-select:disabled, .form-textarea:disabled {
+            background-color: #F5F5F5;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        /* Updated Mobile Input Group Styling */
+.mobile-input-group {
+    display: flex;
+    border: 2px solid #E6E6E6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.mobile-input-group:focus-within {
+    border-color: #C8102E;
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.mobile-prefix {
+    flex: 0 0 90px;
+    border: none;
+    border-right: 1px solid #E6E6E6;
+    border-radius: 0;
+    font-size: 14px;
+    background: #F8F9FA;
+    padding: 14px 12px;
+    color: #666;
+    appearance: none;
+    cursor: pointer;
+}
+
+.mobile-input {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    background: white;
+}
+
+.mobile-prefix:focus, .mobile-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.mobile-input-group.error {
+    border-color: #C8102E;
+}
+
+.mobile-input-group.error .mobile-input {
+    background-color: #FEF2F2;
+}
+
+@media (max-width: 768px) {
+    .mobile-prefix {
+        flex: 0 0 80px;
+        font-size: 12px;
+        padding: 14px 8px;
+    }
+}

@@ -1,0 +1,217 @@
+<div class="merchant-form-container">
+    <div class="merchant-card">
+        <!-- Success Message -->
+        <div *ngIf="submitSuccess" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            Merchant application submitted successfully!
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="submitError" class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ submitError }}
+        </div>
+
+        <form [formGroup]="merchantForm" (ngSubmit)="onSubmit()" class="merchant-form">
+            
+            <!-- Transaction Types Requiring Bank Approval Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="icon fas fa-check-circle"></i>
+                    Transaction Types Requiring Bank Approval
+                </h2>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="telephoneOrders"
+                                (change)="onFacilityChange('telephoneOrders', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Telephone Orders</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="mailOrders"
+                                (change)="onFacilityChange('mailOrders', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Mail Orders</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="telemarketing"
+                                (change)="onFacilityChange('telemarketing', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Telemarketing</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="internetComputerNetwork"
+                                (change)="onFacilityChange('internetComputerNetwork', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Internet/Computer Network</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="recurringTransactions"
+                                (change)="onFacilityChange('recurringTransactions', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Recurring Transactions</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="cashAdvances"
+                                (change)="onFacilityChange('cashAdvances', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Cash Advances</span>
+                        </label>
+                    </div>
+                    <div class="checkbox-item">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                formControlName="purchaseWithCashback"
+                                (change)="onFacilityChange('purchaseWithCashback', $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Purchase with Cash-back</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facility Selection Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="icon fas fa-cogs"></i>
+                    Facility Selection
+                </h2>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item" *ngFor="let facility of facilityOptions">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                [formControlName]="facility.id"
+                                [checked]="facility.selected"
+                                (change)="onFacilityChange(facility.id, $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">{{ facility.name }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Network Selection Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="icon fas fa-credit-card"></i>
+                    Card Network Selection
+                </h2>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item" *ngFor="let network of cardNetworkOptions">
+                        <label class="checkbox-label">
+                            <input 
+                                type="checkbox" 
+                                class="checkbox-input"
+                                [formControlName]="network.id"
+                                [checked]="network.selected"
+                                (change)="onCardNetworkChange(network.id, $event)">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">{{ network.name }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing and Limits Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="icon fas fa-dollar-sign"></i>
+                    Pricing and Limits 
+                </h2>
+                <div class="pricing-list">
+                    <div class="pricing-header">
+                        <span class="parameter-label">Parameter</span>
+                        <span class="value-label">Value</span>
+                    </div>
+                    <div class="pricing-row" *ngFor="let param of pricingParameters">
+                        <span class="parameter-name">{{ param.parameter }}</span>
+                        <span class="parameter-value">{{ param.value }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Types Section -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="icon fas fa-shield-alt"></i>
+                    Standard Transaction Types
+                </h2>
+                <div class="transaction-list">
+                    <div class="transaction-header">
+                        <span class="transaction-type-label">Transaction Type</span>
+                        <span class="requires-approval-label">Requires Approval</span>
+                    </div>
+                    <div class="transaction-row" *ngFor="let transaction of transactionTypes">
+                        <span class="transaction-name">{{ transaction.type }}</span>
+                        <span class="approval-status" [class.required]="transaction.requiresApproval">
+                            {{ transaction.requiresApproval ? '✓' : '✗' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            
+        </form>
+
+        <!-- Form Summary (Optional) -->
+        <div class="form-summary" *ngIf="merchantForm.valid">
+            <h3>Application Summary</h3>
+            <div class="summary-section">
+                <h4>Selected Facilities:</h4>
+                <div class="summary-items">
+                    <span *ngFor="let facility of getSelectedFacilities(); let last = last" class="summary-item">
+                        {{ facility }}<span *ngIf="!last">, </span>
+                    </span>
+                    <span *ngIf="getSelectedFacilities().length === 0" class="no-selection">
+                        No facilities selected
+                    </span>
+                </div>
+            </div>
+            <div class="summary-section">
+                <h4>Selected Card Networks:</h4>
+                <div class="summary-items">
+                    <span *ngFor="let network of getSelectedCardNetworks(); let last = last" class="summary-item">
+                        {{ network }}<span *ngIf="!last">, </span>
+                    </span>
+                    <span *ngIf="getSelectedCardNetworks().length === 0" class="no-selection">
+                        No card networks selected
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

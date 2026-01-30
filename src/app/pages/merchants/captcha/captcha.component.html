@@ -1,0 +1,130 @@
+<div class="verification-screen">
+  <div class="verification-container">
+    <div class="verification-header">
+      <h1>{{ title }}</h1>
+    </div>
+
+    <div class="verification-content">
+      <!-- OTP Section -->
+      <div *ngIf="otpStage" class="verification-section">
+        <div class="step-indicator">
+          <span class="step active">1</span>
+          <span class="step-line"></span>
+          <span class="step">2</span>
+        </div>
+
+        <h2 class="section-title">Step 1: Enter OTP </h2>
+        
+
+        <div *ngIf="otpStage" class="verification-section">
+          <p class="instruction-text">
+            Please enter the 6-digit verification code sent to 
+            <strong>{{ getMaskedPhoneNumber() }}</strong>:
+          </p>
+        </div>
+
+        <div class="otp-container">
+          <input
+            nz-input
+            type="text"
+            maxlength="6"
+            [(ngModel)]="otpValue"
+            placeholder="Enter 6-digit code"
+            [disabled]="otpLoading"
+            class="otp-input"
+            nzSize="large" />
+        </div>
+
+        <div class="otp-actions">
+          <button 
+            nz-button 
+            nzType="link" 
+            (click)="resendOtp()" 
+            [nzLoading]="resendLoading">
+            {{ resendLoading ? 'Sending...' : 'Resend OTP' }}
+          </button>
+        </div>
+
+        <div *ngIf="otpError" class="error-message">
+          ❌ {{ otpError }}
+        </div>
+
+        <div class="action-buttons">
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            [disabled]="otpValue.length !== 6"
+            [nzLoading]="otpLoading"
+            (click)="verifyOtp()">
+            Verify OTP
+          </button>
+        </div>
+      </div>
+
+      <!-- CAPTCHA Section -->
+      <div *ngIf="!otpStage" class="verification-section">
+        <div class="step-indicator">
+          <span class="step completed">✓</span>
+          <span class="step-line completed"></span>
+          <span class="step active">2</span>
+        </div>
+
+        <h2 class="section-title">Step 2: Complete CAPTCHA</h2>
+        <p class="instruction-text">
+          Please enter the verification code shown below:
+        </p>
+
+        <div class="captcha-card">
+          <canvas
+            #captchaCanvas
+            width="200"
+            height="70"
+            class="captcha-canvas"
+            (click)="generateNewCaptcha()"
+            title="Click to refresh">
+            Your browser does not support the canvas element.
+          </canvas>
+
+          <input
+            nz-input
+            #captchaInput
+            type="text"
+            placeholder="Enter captcha code"
+            [(ngModel)]="userInput"
+            (input)="handleInputChange($event)"
+            (keyup.enter)="handleVerify()"
+            maxlength="5"
+            class="captcha-input"
+            [class.success]="userInput.length === captchaCode.length && isValid"
+            [class.error]="userInput.length === captchaCode.length && !isValid"
+            nzSize="large" />
+        </div>
+
+        <div *ngIf="userInput.length === captchaCode.length && !isValid" class="error-message">
+          ❌ Incorrect code
+        </div>
+
+        <div *ngIf="isValid" class="success-message">
+          ✅ Verification successful!
+        </div>
+
+        <div class="action-buttons">
+          <button nz-button nzType="default" (click)="goBackToOtp()">
+            Back
+          </button>
+          <button nz-button nzType="default" (click)="generateNewCaptcha()">
+            Refresh
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            [disabled]="!isValid"
+            (click)="handleVerify()">
+            Complete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,379 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #F2F2F2;
+  color: #333;
+  min-height: 100vh;
+}
+
+.form-section {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+  width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #F2F2F2;
+}
+
+.section-header i {
+  color: #C8102E;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.section-title {
+  color: #001E42;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.contact-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #F8F9FA;
+  border: 1px solid #E6E6E6;
+  border-radius: 12px;
+}
+
+.contact-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #001E42;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.contact-section-title i {
+  margin-right: 8px;
+  color: #C8102E;
+  font-size: 18px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #001E42;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.required {
+  color: #C8102E;
+  margin-left: 4px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 48px 14px 16px;
+  border: 2px solid #E6E6E6;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #C8102E;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.form-input::placeholder {
+  color: #999;
+}
+
+.form-input.error {
+  border-color: #C8102E;
+}
+
+.form-input.error:focus {
+  border-color: #C8102E;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.2);
+}
+
+.input-with-icon i {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #C8102E;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.error-message i {
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #F2F2F2;
+}
+
+/* Button Styles matching CBZ Bank theme */
+button[nz-button] {
+  background: linear-gradient(135deg, #C8102E, #A00E26);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  justify-content: center;
+}
+
+button[nz-button]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(200, 16, 46, 0.3);
+}
+
+button[nz-button]:disabled {
+  background: #E6E6E6;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Focus and interaction enhancements */
+.form-input:hover {
+  border-color: #C8102E;
+}
+
+/* Smooth animations */
+.form-group {
+  transition: transform 0.3s ease;
+}
+
+.form-input:focus {
+  transform: translateY(-1px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .form-section {
+    padding: 20px;
+    margin: 16px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .contact-section-title {
+    font-size: 14px;
+  }
+  
+  .contact-section {
+    padding: 16px;
+  }
+  
+  .form-input {
+    padding: 12px 40px 12px 12px;
+  }
+  
+  button[nz-button] {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    padding: 16px;
+    margin: 8px;
+  }
+  
+  .section-header {
+    margin-bottom: 24px;
+  }
+  
+  .contact-section {
+    padding: 12px;
+  }
+  
+  .form-grid {
+    gap: 12px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  button[nz-button] {
+    width: 100%;
+  }
+}
+
+/* Additional styling for consistency with CBZ theme */
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+
+.form-section {
+  position: relative;
+ 
+}
+
+/* Input validation states */
+.form-input:valid:not(:placeholder-shown) {
+  border-color: #10B981;
+}
+
+/* Loading state for buttons */
+button[nz-button].loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Enhanced focus styles for accessibility */
+.form-input:focus-visible {
+  outline: 2px solid #C8102E;
+  outline-offset: 2px;
+}
+
+/* Icon color adjustments for better contrast */
+.input-with-icon .fas.fa-envelope,
+.input-with-icon .fas.fa-mobile-alt,
+.input-with-icon .fas.fa-phone,
+.input-with-icon .fab.fa-facebook-f,
+.input-with-icon .fab.fa-x-twitter,
+.input-with-icon .fab.fa-linkedin-in,
+.input-with-icon .fab.fa-skype {
+  color: #666;
+}
+
+.form-input:focus + i {
+  color: #C8102E;
+}
+
+/* Mobile Input Group - Combined input and dropdown */
+.mobile-input-group {
+    display: flex;
+    align-items: center;
+    border: 2px solid #E6E6E6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white; /* Match the background of other inputs */
+}
+
+/* State for when the entire group is focused */
+.mobile-input-group:focus-within {
+    border-color: #C8102E;
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+/* Country Code Dropdown */
+.mobile-prefix {
+    /* Fixed width to ensure it doesn't shrink */
+    flex: 0 0 100px; 
+    padding: 14px 12px;
+    border: none;
+    border-right: 2px solid #E6E6E6; /* Separator line */
+    border-radius: 0; /* Remove rounded corners */
+    font-size: 14px; /* Adjust font size to match other inputs */
+    font-family: 'Roboto', sans-serif;
+    background: #F8F9FA; /* Light grey background for the dropdown */
+    color: #333; /* Standard text color */
+}
+
+/* Phone Number Input Field */
+.mobile-input {
+    /* Allows the input to grow and fill the remaining space */
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    background: white; /* Match the background of other inputs */
+}
+
+/* Remove focus outlines from child elements to avoid double borders */
+.mobile-prefix:focus,
+.mobile-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Error State for the mobile number input group */
+.mobile-input-group.error {
+    border-color: #C8102E;
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+/* You can also use a focus style for the error state if needed */
+.mobile-input-group.error:focus-within {
+    border-color: #C8102E;
+}
